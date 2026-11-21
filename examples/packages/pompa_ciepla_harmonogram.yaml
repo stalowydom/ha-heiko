@@ -1,0 +1,168 @@
+# Harmonogram trybu pompy Heiko (lokalnie przez USR-W600, wymaga heiko_thermal z allow_write: true).
+#
+# - Ogrzewanie (sam CO) od 00:00, Auto (CO + CWU) od 19:00. Godziny ustawiasz raz w UI
+#   (Ustawienia -> Pomocnicy) i włączasz "Pompa ciepła – harmonogram trybu". HA pamięta je po restarcie.
+# - Ręczne Auto w ciągu dnia (z HA albo z aplikacji MyHeatPump) = ktoś chce gorącej wody.
+#   HA czeka, aż pompa skończy grzać CWU, i dopiero wtedy wraca na Ogrzewanie.
+#   Koniec grzania CWU rozpoznaje po polu 2 ramki live (sensor.heiko_tryb_pracy: 1 = pompa grzeje CWU).
+#   Jeśli pompa w ciągu 15 min nie zacznie grzać CWU (woda już ciepła), wraca od razu. Maksymalnie czeka 4 h.
+# - O północy: jeśli pompa akurat grzeje CWU, też najpierw dokończy.
+# - Harmonogram nie rusza trybu Chłodzenie ani CWU ustawionych ręcznie.
+
+input_boolean:
+  heiko_harmonogram:
+    name: Pompa ciepła – harmonogram trybu
+    icon: mdi:calendar-clock
+
+input_datetime:
+  heiko_ogrzewanie_od:
+    name: Pompa ciepła – Ogrzewanie od
+    has_date: false
+    has_time: true
+  heiko_auto_od:
+    name: Pompa ciepła – Auto (CO + CWU) od
+    has_date: false
+    has_time: true
+
+template:
+  - sensor:
+      - name: Heiko tryb wg harmonogramu
+        unique_id: heiko_tryb_wg_harmonogramu
+        icon: mdi:calendar-check
+        state: >-
+          {% set t = now().strftime('%H:%M:%S') %}
+          {% set h = states('input_datetime.heiko_ogrzewanie_od') %}
+          {% set a = states('input_datetime.heiko_auto_od') %}
+          {% if a > h %}{% set auto = t >= a or t < h %}{% else %}{% set auto = a <= t < h %}{% endif %}
+          {{ 'Auto (ogrzewanie + CWU)' if auto else 'Ogrzewanie' }}
+      - name: Heiko harmonogram status
+        unique_id: heiko_harmonogram_status
+        icon: mdi:timer-sand
+        state: >-
+          {% if is_state('input_boolean.heiko_harmonogram', 'off') %}Wyłączony
+          {% elif (state_attr('automation.pompa_ciepla_powrot_na_ogrzewanie_po_cwu', 'current') or 0) > 0 %}
+            {{ 'Grzeje CWU, potem Ogrzewanie' if is_state('sensor.heiko_tryb_pracy', '1') else 'Czeka na start grzania CWU' }}
+          {% else %}Wg harmonogramu{% endif %}
+
+automation:
+  # 19:00 -> Auto
+  - id: heiko_harmonogram_auto
+    alias: Pompa ciepła – harmonogram Auto
+    description: O godzinie "Auto od" przełącza pompę z Ogrzewania na Auto (CO + CWU).
+    mode: single
+    triggers:
+      - trigger: time
+        at: input_datetime.heiko_auto_od
+      # sensor z now() przelicza się chwilę po wyzwalaczu czasowym, więc reaguj też na jego zmianę
+      - trigger: state
+        entity_id: sensor.heiko_tryb_wg_harmonogramu
+        to: Auto (ogrzewanie + CWU)
+      - trigger: state
+        entity_id: [input_boolean.heiko_harmonogram, input_datetime.heiko_ogrzewanie_od, input_datetime.heiko_auto_od]
+      # po restarcie HA i po odzyskaniu połączenia z modułem
+      - trigger: state
+        entity_id: select.heiko_tryb_pracy_pompy
+        from: unavailable
+        for: "00:01:00"
+    conditions:
+      # w standby harmonogram nic nie wysyła do pompy
+      - condition: state
+        entity_id: switch.heiko_pompa_wlaczona
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.heiko_harmonogram
+        state: "on"
+      - condition: state
+        entity_id: sensor.heiko_tryb_wg_harmonogramu
+        state: Auto (ogrzewanie + CWU)
+      - condition: state
+        entity_id: select.heiko_tryb_pracy_pompy
+        state: Ogrzewanie
+    actions:
+      - action: select.select_option
+        target: { entity_id: select.heiko_tryb_pracy_pompy }
+        data: { option: Auto (ogrzewanie + CWU) }
+        continue_on_error: true
+      - delay: "00:00:30"
+      - if: "{{ not is_state('select.heiko_tryb_pracy_pompy', 'Auto (ogrzewanie + CWU)') }}"
+        then:
+          - action: persistent_notification.create
+            data:
+              title: Pompa ciepła – nie zmieniono trybu
+              message: Harmonogram nie przełączył pompy na Auto. Sprawdź połączenie z modułem USR-W600 i log HA (heiko_thermal).
+              notification_id: heiko_harmonogram
+
+  # 00:00 i ręczne Auto w dzień -> Ogrzewanie, ale dopiero po nagrzaniu CWU
+  - id: heiko_powrot_na_ogrzewanie
+    alias: Pompa ciepła – powrót na Ogrzewanie po CWU
+    description: >-
+      W godzinach Ogrzewania wraca z Auto na Ogrzewanie. Po ręcznym Auto czeka na koniec grzania CWU.
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id: select.heiko_tryb_pracy_pompy
+        to: Auto (ogrzewanie + CWU)
+        not_from: unavailable
+        id: reczne
+      - trigger: time
+        at: input_datetime.heiko_ogrzewanie_od
+        id: harmonogram
+      # sensor z now() przelicza się chwilę po wyzwalaczu czasowym, więc reaguj też na jego zmianę
+      - trigger: state
+        entity_id: sensor.heiko_tryb_wg_harmonogramu
+        to: Ogrzewanie
+        id: harmonogram
+      - trigger: state
+        entity_id: [input_boolean.heiko_harmonogram, input_datetime.heiko_ogrzewanie_od, input_datetime.heiko_auto_od]
+        id: harmonogram
+      - trigger: state
+        entity_id: select.heiko_tryb_pracy_pompy
+        from: unavailable
+        for: "00:01:00"
+        id: harmonogram
+    conditions: &warunki_powrotu
+      - condition: state
+        entity_id: switch.heiko_pompa_wlaczona
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.heiko_harmonogram
+        state: "on"
+      - condition: state
+        entity_id: sensor.heiko_tryb_wg_harmonogramu
+        state: Ogrzewanie
+      - condition: state
+        entity_id: select.heiko_tryb_pracy_pompy
+        state: Auto (ogrzewanie + CWU)
+    actions:
+      # po ręcznym Auto daj pompie czas na start grzania CWU
+      - if: "{{ trigger.id == 'reczne' and not is_state('sensor.heiko_tryb_pracy', '1') }}"
+        then:
+          - wait_template: "{{ is_state('sensor.heiko_tryb_pracy', '1') }}"
+            timeout: "00:15:00"
+            continue_on_timeout: true
+      # pompa grzeje CWU -> czekaj, aż skończy (stan inny niż 1 przez 2 min)
+      - if: "{{ is_state('sensor.heiko_tryb_pracy', '1') }}"
+        then:
+          - wait_for_trigger:
+              - trigger: state
+                entity_id: sensor.heiko_tryb_pracy
+                from: "1"
+                not_to: [unavailable, unknown]
+                for: "00:02:00"
+            timeout: "04:00:00"
+            continue_on_timeout: true
+      # w międzyczasie mogło się coś zmienić (ktoś przełączył tryb, minęła 19:00, wyłączony harmonogram)
+      - condition: and
+        conditions: *warunki_powrotu
+      - action: select.select_option
+        target: { entity_id: select.heiko_tryb_pracy_pompy }
+        data: { option: Ogrzewanie }
+        continue_on_error: true
+      - delay: "00:00:30"
+      - if: "{{ not is_state('select.heiko_tryb_pracy_pompy', 'Ogrzewanie') }}"
+        then:
+          - action: persistent_notification.create
+            data:
+              title: Pompa ciepła – nie zmieniono trybu
+              message: Harmonogram nie przełączył pompy na Ogrzewanie. Sprawdź połączenie z modułem USR-W600 i log HA (heiko_thermal).
+              notification_id: heiko_harmonogram

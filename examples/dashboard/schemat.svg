@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="tank" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff5b3a"/>
+      <stop offset="0.45" stop-color="#ff9f43"/>
+      <stop offset="0.75" stop-color="#5f8dff"/>
+      <stop offset="1" stop-color="#2f6bff"/>
+    </linearGradient>
+    <linearGradient id="tankShine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.18"/>
+      <stop offset="0.35" stop-color="#fff" stop-opacity="0.04"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="unit" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4150"/>
+      <stop offset="1" stop-color="#262b35"/>
+    </linearGradient>
+    <linearGradient id="mats" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff9f43" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#ff9f43" stop-opacity="0.05"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="560" rx="22" fill="#171a21"/>
+  <path d="M0 470 H1000" stroke="#ffffff" stroke-opacity="0.04"/>
+
+  <!-- pipes heat pump <-> tank -->
+  <path d="M262 205 H400 Q420 205 420 185 V165 Q420 145 440 145 H522" fill="none" stroke="#ff6b4a" stroke-width="10" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M262 330 H400 Q420 330 420 350 V420 Q420 440 440 440 H522" fill="none" stroke="#4aa8ff" stroke-width="10" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M314 205 l-14 -7 v14 z M494 145 l-14 -7 v14 z" fill="#ffd2c7"/>
+  <path d="M480 440 l14 -7 v14 z M300 330 l14 -7 v14 z" fill="#cfe7ff"/>
+
+  <!-- outdoor unit: two fans -->
+  <rect x="40" y="118" width="222" height="352" rx="18" fill="url(#unit)" stroke="#4b5363" stroke-width="2"/>
+  <g transform="translate(151 215) scale(0.8)">
+    <circle r="72" fill="#1d2129" stroke="#4b5363" stroke-width="2.5"/>
+    <g stroke="#59627a" stroke-width="2.5" fill="none">
+      <circle r="60"/><circle r="44"/>
+      <path d="M-60 0 H60 M0 -60 V60 M-42.4 -42.4 L42.4 42.4 M42.4 -42.4 L-42.4 42.4"/>
+    </g>
+    <g fill="#8a94ad" opacity="0.9">
+      <path d="M0 0 C-10 -30 -1 -50 15 -52 C19 -30 11 -12 0 0 Z"/>
+      <path d="M0 0 C30 -10 50 -1 52 15 C30 19 12 11 0 0 Z"/>
+      <path d="M0 0 C10 30 1 50 -15 52 C-19 30 -11 12 0 0 Z"/>
+      <path d="M0 0 C-30 10 -50 1 -52 -15 C-30 -19 -12 -11 0 0 Z"/>
+    </g>
+    <circle r="9" fill="#c9d1e3"/>
+  </g>
+  <g transform="translate(151 338) scale(0.8)">
+    <circle r="72" fill="#1d2129" stroke="#4b5363" stroke-width="2.5"/>
+    <g stroke="#59627a" stroke-width="2.5" fill="none">
+      <circle r="60"/><circle r="44"/>
+      <path d="M-60 0 H60 M0 -60 V60 M-42.4 -42.4 L42.4 42.4 M42.4 -42.4 L-42.4 42.4"/>
+    </g>
+    <g fill="#8a94ad" opacity="0.9">
+      <path d="M0 0 C-10 -30 -1 -50 15 -52 C19 -30 11 -12 0 0 Z"/>
+      <path d="M0 0 C30 -10 50 -1 52 15 C30 19 12 11 0 0 Z"/>
+      <path d="M0 0 C10 30 1 50 -15 52 C-19 30 -11 12 0 0 Z"/>
+      <path d="M0 0 C-30 10 -50 1 -52 -15 C-30 -19 -12 -11 0 0 Z"/>
+    </g>
+    <circle r="9" fill="#c9d1e3"/>
+  </g>
+  <rect x="58" y="404" width="186" height="50" rx="10" fill="#14171d" opacity="0.6"/>
+  <text x="151" y="100" text-anchor="middle" fill="#aab3c5" font-size="17" font-weight="600" letter-spacing="1">POMPA CIEPŁA</text>
+
+  <!-- tank: white shell with centred strip, right part cut away with two copper coils -->
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#aab1bc"/><stop offset="0.35" stop-color="#eef1f5"/><stop offset="0.8" stop-color="#ffffff"/><stop offset="1" stop-color="#e3e6eb"/>
+    </linearGradient>
+    <linearGradient id="strip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff5b3a"/><stop offset="0.45" stop-color="#ff9f43"/><stop offset="0.75" stop-color="#5f8dff"/><stop offset="1" stop-color="#2f6bff"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b414b"/><stop offset="0.6" stop-color="#5a616d"/><stop offset="1" stop-color="#2c3139"/>
+    </linearGradient>
+    <linearGradient id="cu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffc08a"/><stop offset="0.35" stop-color="#e8823e"/><stop offset="0.75" stop-color="#b5541c"/><stop offset="1" stop-color="#7a3410"/>
+    </linearGradient>
+    <linearGradient id="cuShade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0.35"/><stop offset="0.25" stop-color="#000" stop-opacity="0"/><stop offset="0.75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.4"/>
+    </linearGradient>
+    <pattern id="wool" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#9a9a96"/><circle cx="1.5" cy="1.5" r="0.9" fill="#7c7c78"/><circle cx="4.5" cy="4" r="0.8" fill="#b4b4af"/>
+    </pattern>
+    <clipPath id="vessel"><path d="M616 98 Q616 86 628 86 H646 Q674 86 674 116 V446 Q674 476 646 476 H628 Q616 476 616 464 Z"/></clipPath>
+  </defs>
+  <ellipse cx="602" cy="506" rx="86" ry="9" fill="#000" opacity="0.35"/>
+  <rect x="566" y="494" width="10" height="12" rx="2" fill="#2a2f39"/><rect x="628" y="494" width="10" height="12" rx="2" fill="#2a2f39"/>
+  <!-- shell -->
+  <path d="M616 64 H534 Q522 64 522 76 V484 Q522 496 534 496 H616 Z" fill="url(#shell)"/>
+  <path d="M616 64 H534 Q522 64 522 76 V80 H616 Z" fill="#ffffff" opacity="0.9"/>
+  <!-- cutaway: insulation + vessel -->
+  <path d="M616 64 H670 Q682 64 682 76 V484 Q682 496 670 496 H616 Z" fill="url(#wool)"/>
+  <path d="M616 98 Q616 86 628 86 H646 Q674 86 674 116 V446 Q674 476 646 476 H628 Q616 476 616 464 Z" fill="url(#steel)"/>
+  <g clip-path="url(#vessel)">
+    <rect x="616" y="86" width="58" height="390" fill="url(#strip)" opacity="0.38"/>
+    <rect x="620" y="102.4" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="111.8" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="121.2" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="130.6" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="140.0" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="149.4" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="158.8" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="168.2" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="177.6" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="187.0" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="196.4" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="205.8" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="215.2" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="224.6" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="234.0" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="296.4" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="305.8" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="315.2" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="324.6" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="334.0" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="343.4" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="352.8" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="362.2" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="371.6" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="381.0" width="50" height="7.2" rx="3.6" fill="url(#cu)"/>
+    <rect x="620" y="86" width="50" height="390" fill="url(#cuShade)"/>
+  </g>
+  <path d="M616 98 Q616 86 628 86 H646 Q674 86 674 116 V446 Q674 476 646 476 H628 Q616 476 616 464 Z" fill="none" stroke="#c9ced6" stroke-opacity="0.6" stroke-width="1.5"/>
+  <!-- centred strip -->
+  <rect x="588" y="64" width="28" height="432" fill="url(#strip)"/>
+  <rect x="588" y="64" width="28" height="432" fill="#000" opacity="0.08"/>
+  <path d="M616 64 V496" stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.5"/>
+  <circle cx="602" cy="100" r="9" fill="#f4f6f9" stroke="#8b929e" stroke-width="2"/><path d="M602 100 L606 95" stroke="#2a2f39" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="602" cy="466" r="9" fill="#f4f6f9" stroke="#8b929e" stroke-width="2"/><path d="M602 466 L598 462" stroke="#2a2f39" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- coil connections through the jacket -->
+  <g fill="#c9ced6" stroke="#6b7280" stroke-width="1"><rect x="668" y="104" width="17" height="8" rx="2"/><rect x="668" y="234" width="17" height="8" rx="2"/><rect x="668" y="296" width="17" height="8" rx="2"/><rect x="668" y="381" width="17" height="8" rx="2"/></g>
+  <text x="602" y="42" text-anchor="middle" fill="#aab3c5" font-size="17" font-weight="600" letter-spacing="1">NOEL 700 l</text>
+  <!-- probe marks -->
+  <g fill="#ffffff" stroke="#171a21" stroke-width="2"><circle cx="522" cy="140" r="5"/><circle cx="522" cy="285" r="5"/><circle cx="522" cy="430" r="5"/></g>
+
+  <!-- DHW out / cold in -->
+  <path d="M685 108 H840" stroke="#ff6b4a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M685 238 H840" stroke="#4aa8ff" stroke-width="7" stroke-linecap="round"/>
+  <g transform="translate(860 86)" fill="none" stroke="#e8ecf5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 22 H22 V10 H46 V22"/><path d="M34 10 V2 M26 2 H42"/><path d="M46 22 V34"/>
+    <path d="M42 44 q4 6 0 10 M50 44 q4 6 0 10" stroke="#4aa8ff"/>
+  </g>
+  <text x="940" y="114" fill="#e8ecf5" font-size="17" font-weight="600">CWU</text>
+  <text x="700" y="258" fill="#8a94ad" font-size="13">zimna woda</text>
+
+  <!-- capillary mats -->
+  <defs>
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1f7a43"/><stop offset="0.45" stop-color="#4fd486"/><stop offset="1" stop-color="#196437"/>
+    </linearGradient>
+  </defs>
+  <path d="M685 300 H806" stroke="#ff9f43" stroke-width="7" stroke-linecap="round"/>
+  <path d="M685 385 H824" stroke="#4aa8ff" stroke-width="7" stroke-linecap="round"/>
+  <rect x="790" y="270" width="180" height="168" rx="14" fill="#4ade80" fill-opacity="0.06" stroke="#4ade80" stroke-opacity="0.35" stroke-width="1.5"/>
+  <g fill="none" stroke="#3fcf78" stroke-width="2.6" stroke-linecap="round">
+    <path d="M806 294 H900 C922 294 948 290 948 299.5 C948 309 922 305 900 305 H824" />
+    <path d="M806 316 H900 C922 316 948 312 948 321.5 C948 331 922 327 900 327 H824" />
+    <path d="M806 338 H900 C922 338 948 334 948 343.5 C948 353 922 349 900 349 H824" />
+    <path d="M806 360 H900 C922 360 948 356 948 365.5 C948 375 922 371 900 371 H824" />
+    <path d="M806 382 H900 C922 382 948 378 948 387.5 C948 397 922 393 900 393 H824" />
+  </g>
+  <g fill="none" stroke="#b9f5cf" stroke-opacity="0.45" stroke-width="0.8">
+    <path d="M806 294 H900 C922 294 948 290 948 299.5 C948 309 922 305 900 305 H824" transform="translate(0 -0.8)"/>
+    <path d="M806 316 H900 C922 316 948 312 948 321.5 C948 331 922 327 900 327 H824" transform="translate(0 -0.8)"/>
+    <path d="M806 338 H900 C922 338 948 334 948 343.5 C948 353 922 349 900 349 H824" transform="translate(0 -0.8)"/>
+    <path d="M806 360 H900 C922 360 948 356 948 365.5 C948 375 922 371 900 371 H824" transform="translate(0 -0.8)"/>
+    <path d="M806 382 H900 C922 382 948 378 948 387.5 C948 397 922 393 900 393 H824" transform="translate(0 -0.8)"/>
+  </g>
+  <g fill="#2a9d5a" stroke="#123d24" stroke-width="0.5"><rect x="863.5" y="291.5" width="5" height="5" rx="1"/><rect x="863.5" y="302.5" width="5" height="5" rx="1"/><rect x="863.5" y="313.5" width="5" height="5" rx="1"/><rect x="863.5" y="324.5" width="5" height="5" rx="1"/><rect x="863.5" y="335.5" width="5" height="5" rx="1"/><rect x="863.5" y="346.5" width="5" height="5" rx="1"/><rect x="863.5" y="357.5" width="5" height="5" rx="1"/><rect x="863.5" y="368.5" width="5" height="5" rx="1"/><rect x="863.5" y="379.5" width="5" height="5" rx="1"/><rect x="863.5" y="390.5" width="5" height="5" rx="1"/><rect x="897.5" y="291.5" width="5" height="5" rx="1"/><rect x="897.5" y="302.5" width="5" height="5" rx="1"/><rect x="897.5" y="313.5" width="5" height="5" rx="1"/><rect x="897.5" y="324.5" width="5" height="5" rx="1"/><rect x="897.5" y="335.5" width="5" height="5" rx="1"/><rect x="897.5" y="346.5" width="5" height="5" rx="1"/><rect x="897.5" y="357.5" width="5" height="5" rx="1"/><rect x="897.5" y="368.5" width="5" height="5" rx="1"/><rect x="897.5" y="379.5" width="5" height="5" rx="1"/><rect x="897.5" y="390.5" width="5" height="5" rx="1"/></g>
+  <rect x="818" y="282" width="12" height="128" rx="6" fill="url(#hdr)"/>
+  <rect x="800" y="276" width="12" height="122" rx="6" fill="url(#hdr)"/>
+  <g fill="#2a9d5a"><circle cx="812" cy="294" r="2.2"/><circle cx="830" cy="305" r="2.2"/><circle cx="812" cy="316" r="2.2"/><circle cx="830" cy="327" r="2.2"/><circle cx="812" cy="338" r="2.2"/><circle cx="830" cy="349" r="2.2"/><circle cx="812" cy="360" r="2.2"/><circle cx="830" cy="371" r="2.2"/><circle cx="812" cy="382" r="2.2"/><circle cx="830" cy="393" r="2.2"/></g>
+  <text x="880" y="428" text-anchor="middle" fill="#e8ecf5" font-size="15" font-weight="600">Maty kapilarne</text>
+</svg>

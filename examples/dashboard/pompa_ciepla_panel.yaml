@@ -1,0 +1,514 @@
+title: Pompa ciepła
+views:
+- title: Pompa ciepła
+  path: pompa
+  icon: mdi:heat-pump
+  type: sections
+  max_columns: 4
+  badges:
+  - type: entity
+    entity: sensor.temperatura_zewnetrzna_finalna
+    name: Na zewnątrz
+    show_name: true
+  - type: entity
+    entity: sensor.tze284_dikb3dp6_ts0601_total_power
+    name: Pobór
+    show_name: true
+    icon: mdi:flash
+  - type: entity
+    entity: sensor.temperatura_gorna_noel_sonoff_snzb_02ld
+    name: CWU (góra)
+    show_name: true
+    icon: mdi:water-boiler
+  - type: entity
+    entity: select.heiko_tryb_pracy_pompy
+    name: Tryb
+    show_name: true
+  - type: entity
+    entity: sensor.heiko_harmonogram_status
+    name: Harmonogram
+    show_name: true
+  sections:
+  - type: grid
+    column_span: 3
+    cards:
+    - type: heading
+      heading: Instalacja
+      icon: mdi:hvac
+    - type: picture-elements
+      image: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDU2MCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLCBSb2JvdG8sIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJ0YW5rIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWIzYSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNmZjlmNDMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIwLjc1IiBzdG9wLWNvbG9yPSIjNWY4ZGZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzJmNmJmZiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0idGFua1NoaW5lIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC4zNSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwLjA0Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIwLjI1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJ1bml0IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzNhNDE1MCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyNjJiMzUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Im1hdHMiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIwIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmY5ZjQzIiBzdG9wLW9wYWNpdHk9IjAuMjUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmY5ZjQzIiBzdG9wLW9wYWNpdHk9IjAuMDUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJnbG93IiB4PSItNTAlIiB5PSItNTAlIiB3aWR0aD0iMjAwJSIgaGVpZ2h0PSIyMDAlIj4KICAgICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMyIgcmVzdWx0PSJiIi8+CiAgICAgIDxmZU1lcmdlPjxmZU1lcmdlTm9kZSBpbj0iYiIvPjxmZU1lcmdlTm9kZSBpbj0iU291cmNlR3JhcGhpYyIvPjwvZmVNZXJnZT4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KCiAgPHJlY3Qgd2lkdGg9IjEwMDAiIGhlaWdodD0iNTYwIiByeD0iMjIiIGZpbGw9IiMxNzFhMjEiLz4KICA8cGF0aCBkPSJNMCA0NzAgSDEwMDAiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMDQiLz4KCiAgPCEtLSBwaXBlcyBoZWF0IHB1bXAgPC0+IHRhbmsgLS0+CiAgPHBhdGggZD0iTTI2MiAyMDUgSDQwMCBRNDIwIDIwNSA0MjAgMTg1IFYxNjUgUTQyMCAxNDUgNDQwIDE0NSBINTIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjZiNGEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CiAgPHBhdGggZD0iTTI2MiAzMzAgSDQwMCBRNDIwIDMzMCA0MjAgMzUwIFY0MjAgUTQyMCA0NDAgNDQwIDQ0MCBINTIyIiBmaWxsPSJub25lIiBzdHJva2U9IiM0YWE4ZmYiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CiAgPHBhdGggZD0iTTMxNCAyMDUgbC0xNCAtNyB2MTQgeiBNNDk0IDE0NSBsLTE0IC03IHYxNCB6IiBmaWxsPSIjZmZkMmM3Ii8+CiAgPHBhdGggZD0iTTQ4MCA0NDAgbDE0IC03IHYxNCB6IE0zMDAgMzMwIGwxNCAtNyB2MTQgeiIgZmlsbD0iI2NmZTdmZiIvPgoKICA8IS0tIG91dGRvb3IgdW5pdDogdHdvIGZhbnMgLS0+CiAgPHJlY3QgeD0iNDAiIHk9IjExOCIgd2lkdGg9IjIyMiIgaGVpZ2h0PSIzNTIiIHJ4PSIxOCIgZmlsbD0idXJsKCN1bml0KSIgc3Ryb2tlPSIjNGI1MzYzIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNTEgMjE1KSBzY2FsZSgwLjgpIj4KICAgIDxjaXJjbGUgcj0iNzIiIGZpbGw9IiMxZDIxMjkiIHN0cm9rZT0iIzRiNTM2MyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDxnIHN0cm9rZT0iIzU5NjI3YSIgc3Ryb2tlLXdpZHRoPSIyLjUiIGZpbGw9Im5vbmUiPgogICAgICA8Y2lyY2xlIHI9IjYwIi8+PGNpcmNsZSByPSI0NCIvPgogICAgICA8cGF0aCBkPSJNLTYwIDAgSDYwIE0wIC02MCBWNjAgTS00Mi40IC00Mi40IEw0Mi40IDQyLjQgTTQyLjQgLTQyLjQgTC00Mi40IDQyLjQiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiM4YTk0YWQiIG9wYWNpdHk9IjAuOSI+CiAgICAgIDxwYXRoIGQ9Ik0wIDAgQy0xMCAtMzAgLTEgLTUwIDE1IC01MiBDMTkgLTMwIDExIC0xMiAwIDAgWiIvPgogICAgICA8cGF0aCBkPSJNMCAwIEMzMCAtMTAgNTAgLTEgNTIgMTUgQzMwIDE5IDEyIDExIDAgMCBaIi8+CiAgICAgIDxwYXRoIGQ9Ik0wIDAgQzEwIDMwIDEgNTAgLTE1IDUyIEMtMTkgMzAgLTExIDEyIDAgMCBaIi8+CiAgICAgIDxwYXRoIGQ9Ik0wIDAgQy0zMCAxMCAtNTAgMSAtNTIgLTE1IEMtMzAgLTE5IC0xMiAtMTEgMCAwIFoiLz4KICAgIDwvZz4KICAgIDxjaXJjbGUgcj0iOSIgZmlsbD0iI2M5ZDFlMyIvPgogIDwvZz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNTEgMzM4KSBzY2FsZSgwLjgpIj4KICAgIDxjaXJjbGUgcj0iNzIiIGZpbGw9IiMxZDIxMjkiIHN0cm9rZT0iIzRiNTM2MyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDxnIHN0cm9rZT0iIzU5NjI3YSIgc3Ryb2tlLXdpZHRoPSIyLjUiIGZpbGw9Im5vbmUiPgogICAgICA8Y2lyY2xlIHI9IjYwIi8+PGNpcmNsZSByPSI0NCIvPgogICAgICA8cGF0aCBkPSJNLTYwIDAgSDYwIE0wIC02MCBWNjAgTS00Mi40IC00Mi40IEw0Mi40IDQyLjQgTTQyLjQgLTQyLjQgTC00Mi40IDQyLjQiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiM4YTk0YWQiIG9wYWNpdHk9IjAuOSI+CiAgICAgIDxwYXRoIGQ9Ik0wIDAgQy0xMCAtMzAgLTEgLTUwIDE1IC01MiBDMTkgLTMwIDExIC0xMiAwIDAgWiIvPgogICAgICA8cGF0aCBkPSJNMCAwIEMzMCAtMTAgNTAgLTEgNTIgMTUgQzMwIDE5IDEyIDExIDAgMCBaIi8+CiAgICAgIDxwYXRoIGQ9Ik0wIDAgQzEwIDMwIDEgNTAgLTE1IDUyIEMtMTkgMzAgLTExIDEyIDAgMCBaIi8+CiAgICAgIDxwYXRoIGQ9Ik0wIDAgQy0zMCAxMCAtNTAgMSAtNTIgLTE1IEMtMzAgLTE5IC0xMiAtMTEgMCAwIFoiLz4KICAgIDwvZz4KICAgIDxjaXJjbGUgcj0iOSIgZmlsbD0iI2M5ZDFlMyIvPgogIDwvZz4KICA8cmVjdCB4PSI1OCIgeT0iNDA0IiB3aWR0aD0iMTg2IiBoZWlnaHQ9IjUwIiByeD0iMTAiIGZpbGw9IiMxNDE3MWQiIG9wYWNpdHk9IjAuNiIvPgogIDx0ZXh0IHg9IjE1MSIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFiM2M1IiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMSI+UE9NUEEgQ0lFUMWBQTwvdGV4dD4KCiAgPCEtLSB0YW5rOiB3aGl0ZSBzaGVsbCB3aXRoIGNlbnRyZWQgc3RyaXAsIHJpZ2h0IHBhcnQgY3V0IGF3YXkgd2l0aCB0d28gY29wcGVyIGNvaWxzIC0tPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsbCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNhYWIxYmMiLz48c3RvcCBvZmZzZXQ9IjAuMzUiIHN0b3AtY29sb3I9IiNlZWYxZjUiLz48c3RvcCBvZmZzZXQ9IjAuOCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2UzZTZlYiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ic3RyaXAiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmY1YjNhIi8+PHN0b3Agb2Zmc2V0PSIwLjQ1IiBzdG9wLWNvbG9yPSIjZmY5ZjQzIi8+PHN0b3Agb2Zmc2V0PSIwLjc1IiBzdG9wLWNvbG9yPSIjNWY4ZGZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmY2YmZmIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzdGVlbCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzYjQxNGIiLz48c3RvcCBvZmZzZXQ9IjAuNiIgc3RvcC1jb2xvcj0iIzVhNjE2ZCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzJjMzEzOSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iY3UiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZjMDhhIi8+PHN0b3Agb2Zmc2V0PSIwLjM1IiBzdG9wLWNvbG9yPSIjZTg4MjNlIi8+PHN0b3Agb2Zmc2V0PSIwLjc1IiBzdG9wLWNvbG9yPSIjYjU1NDFjIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjN2EzNDEwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJjdVNoYWRlIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIwLjM1Ii8+PHN0b3Agb2Zmc2V0PSIwLjI1IiBzdG9wLWNvbG9yPSIjMDAwIiBzdG9wLW9wYWNpdHk9IjAiLz48c3RvcCBvZmZzZXQ9IjAuNzUiIHN0b3AtY29sb3I9IiMwMDAiIHN0b3Atb3BhY2l0eT0iMCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIwLjQiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cGF0dGVybiBpZD0id29vbCIgd2lkdGg9IjYiIGhlaWdodD0iNiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxyZWN0IHdpZHRoPSI2IiBoZWlnaHQ9IjYiIGZpbGw9IiM5YTlhOTYiLz48Y2lyY2xlIGN4PSIxLjUiIGN5PSIxLjUiIHI9IjAuOSIgZmlsbD0iIzdjN2M3OCIvPjxjaXJjbGUgY3g9IjQuNSIgY3k9IjQiIHI9IjAuOCIgZmlsbD0iI2I0YjRhZiIvPgogICAgPC9wYXR0ZXJuPgogICAgPGNsaXBQYXRoIGlkPSJ2ZXNzZWwiPjxwYXRoIGQ9Ik02MTYgOTggUTYxNiA4NiA2MjggODYgSDY0NiBRNjc0IDg2IDY3NCAxMTYgVjQ0NiBRNjc0IDQ3NiA2NDYgNDc2IEg2MjggUTYxNiA0NzYgNjE2IDQ2NCBaIi8+PC9jbGlwUGF0aD4KICA8L2RlZnM+CiAgPGVsbGlwc2UgY3g9IjYwMiIgY3k9IjUwNiIgcng9Ijg2IiByeT0iOSIgZmlsbD0iIzAwMCIgb3BhY2l0eT0iMC4zNSIvPgogIDxyZWN0IHg9IjU2NiIgeT0iNDk0IiB3aWR0aD0iMTAiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjMmEyZjM5Ii8+PHJlY3QgeD0iNjI4IiB5PSI0OTQiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiMyYTJmMzkiLz4KICA8IS0tIHNoZWxsIC0tPgogIDxwYXRoIGQ9Ik02MTYgNjQgSDUzNCBRNTIyIDY0IDUyMiA3NiBWNDg0IFE1MjIgNDk2IDUzNCA0OTYgSDYxNiBaIiBmaWxsPSJ1cmwoI3NoZWxsKSIvPgogIDxwYXRoIGQ9Ik02MTYgNjQgSDUzNCBRNTIyIDY0IDUyMiA3NiBWODAgSDYxNiBaIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjkiLz4KICA8IS0tIGN1dGF3YXk6IGluc3VsYXRpb24gKyB2ZXNzZWwgLS0+CiAgPHBhdGggZD0iTTYxNiA2NCBINjcwIFE2ODIgNjQgNjgyIDc2IFY0ODQgUTY4MiA0OTYgNjcwIDQ5NiBINjE2IFoiIGZpbGw9InVybCgjd29vbCkiLz4KICA8cGF0aCBkPSJNNjE2IDk4IFE2MTYgODYgNjI4IDg2IEg2NDYgUTY3NCA4NiA2NzQgMTE2IFY0NDYgUTY3NCA0NzYgNjQ2IDQ3NiBINjI4IFE2MTYgNDc2IDYxNiA0NjQgWiIgZmlsbD0idXJsKCNzdGVlbCkiLz4KICA8ZyBjbGlwLXBhdGg9InVybCgjdmVzc2VsKSI+CiAgICA8cmVjdCB4PSI2MTYiIHk9Ijg2IiB3aWR0aD0iNTgiIGhlaWdodD0iMzkwIiBmaWxsPSJ1cmwoI3N0cmlwKSIgb3BhY2l0eT0iMC4zOCIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIxMDIuNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMTExLjgiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjEyMS4yIiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIxMzAuNiIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMTQwLjAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjE0OS40IiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIxNTguOCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMTY4LjIiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjE3Ny42IiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIxODcuMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMTk2LjQiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjIwNS44IiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIyMTUuMiIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMjI0LjYiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjIzNC4wIiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIyOTYuNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMzA1LjgiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjMxNS4yIiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIzMjQuNiIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMzM0LjAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjM0My40IiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIzNTIuOCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iMzYyLjIiIHdpZHRoPSI1MCIgaGVpZ2h0PSI3LjIiIHJ4PSIzLjYiIGZpbGw9InVybCgjY3UpIi8+CiAgICA8cmVjdCB4PSI2MjAiIHk9IjM3MS42IiB3aWR0aD0iNTAiIGhlaWdodD0iNy4yIiByeD0iMy42IiBmaWxsPSJ1cmwoI2N1KSIvPgogICAgPHJlY3QgeD0iNjIwIiB5PSIzODEuMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcuMiIgcng9IjMuNiIgZmlsbD0idXJsKCNjdSkiLz4KICAgIDxyZWN0IHg9IjYyMCIgeT0iODYiIHdpZHRoPSI1MCIgaGVpZ2h0PSIzOTAiIGZpbGw9InVybCgjY3VTaGFkZSkiLz4KICA8L2c+CiAgPHBhdGggZD0iTTYxNiA5OCBRNjE2IDg2IDYyOCA4NiBINjQ2IFE2NzQgODYgNjc0IDExNiBWNDQ2IFE2NzQgNDc2IDY0NiA0NzYgSDYyOCBRNjE2IDQ3NiA2MTYgNDY0IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M5Y2VkNiIgc3Ryb2tlLW9wYWNpdHk9IjAuNiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8IS0tIGNlbnRyZWQgc3RyaXAgLS0+CiAgPHJlY3QgeD0iNTg4IiB5PSI2NCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjQzMiIgZmlsbD0idXJsKCNzdHJpcCkiLz4KICA8cmVjdCB4PSI1ODgiIHk9IjY0IiB3aWR0aD0iMjgiIGhlaWdodD0iNDMyIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjA4Ii8+CiAgPHBhdGggZD0iTTYxNiA2NCBWNDk2IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS1vcGFjaXR5PSIwLjg1IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxjaXJjbGUgY3g9IjYwMiIgY3k9IjEwMCIgcj0iOSIgZmlsbD0iI2Y0ZjZmOSIgc3Ryb2tlPSIjOGI5MjllIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNNjAyIDEwMCBMNjA2IDk1IiBzdHJva2U9IiMyYTJmMzkiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8Y2lyY2xlIGN4PSI2MDIiIGN5PSI0NjYiIHI9IjkiIGZpbGw9IiNmNGY2ZjkiIHN0cm9rZT0iIzhiOTI5ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTYwMiA0NjYgTDU5OCA0NjIiIHN0cm9rZT0iIzJhMmYzOSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gY29pbCBjb25uZWN0aW9ucyB0aHJvdWdoIHRoZSBqYWNrZXQgLS0+CiAgPGcgZmlsbD0iI2M5Y2VkNiIgc3Ryb2tlPSIjNmI3MjgwIiBzdHJva2Utd2lkdGg9IjEiPjxyZWN0IHg9IjY2OCIgeT0iMTA0IiB3aWR0aD0iMTciIGhlaWdodD0iOCIgcng9IjIiLz48cmVjdCB4PSI2NjgiIHk9IjIzNCIgd2lkdGg9IjE3IiBoZWlnaHQ9IjgiIHJ4PSIyIi8+PHJlY3QgeD0iNjY4IiB5PSIyOTYiIHdpZHRoPSIxNyIgaGVpZ2h0PSI4IiByeD0iMiIvPjxyZWN0IHg9IjY2OCIgeT0iMzgxIiB3aWR0aD0iMTciIGhlaWdodD0iOCIgcng9IjIiLz48L2c+CiAgPHRleHQgeD0iNjAyIiB5PSI0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2FhYjNjNSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgbGV0dGVyLXNwYWNpbmc9IjEiPk5PRUwgNzAwIGw8L3RleHQ+CiAgPCEtLSBwcm9iZSBtYXJrcyAtLT4KICA8ZyBmaWxsPSIjZmZmZmZmIiBzdHJva2U9IiMxNzFhMjEiIHN0cm9rZS13aWR0aD0iMiI+PGNpcmNsZSBjeD0iNTIyIiBjeT0iMTQwIiByPSI1Ii8+PGNpcmNsZSBjeD0iNTIyIiBjeT0iMjg1IiByPSI1Ii8+PGNpcmNsZSBjeD0iNTIyIiBjeT0iNDMwIiByPSI1Ii8+PC9nPgoKICA8IS0tIERIVyBvdXQgLyBjb2xkIGluIC0tPgogIDxwYXRoIGQ9Ik02ODUgMTA4IEg4NDAiIHN0cm9rZT0iI2ZmNmI0YSIgc3Ryb2tlLXdpZHRoPSI3IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNNjg1IDIzOCBIODQwIiBzdHJva2U9IiM0YWE4ZmYiIHN0cm9rZS13aWR0aD0iNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODYwIDg2KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZThlY2Y1IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNMCAyMiBIMjIgVjEwIEg0NiBWMjIiLz48cGF0aCBkPSJNMzQgMTAgVjIgTTI2IDIgSDQyIi8+PHBhdGggZD0iTTQ2IDIyIFYzNCIvPgogICAgPHBhdGggZD0iTTQyIDQ0IHE0IDYgMCAxMCBNNTAgNDQgcTQgNiAwIDEwIiBzdHJva2U9IiM0YWE4ZmYiLz4KICA8L2c+CiAgPHRleHQgeD0iOTQwIiB5PSIxMTQiIGZpbGw9IiNlOGVjZjUiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI2MDAiPkNXVTwvdGV4dD4KICA8dGV4dCB4PSI3MDAiIHk9IjI1OCIgZmlsbD0iIzhhOTRhZCIgZm9udC1zaXplPSIxMyI+emltbmEgd29kYTwvdGV4dD4KCiAgPCEtLSBjYXBpbGxhcnkgbWF0cyAtLT4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iaGRyIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzFmN2E0MyIvPjxzdG9wIG9mZnNldD0iMC40NSIgc3RvcC1jb2xvcj0iIzRmZDQ4NiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE5NjQzNyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHBhdGggZD0iTTY4NSAzMDAgSDgwNiIgc3Ryb2tlPSIjZmY5ZjQzIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik02ODUgMzg1IEg4MjQiIHN0cm9rZT0iIzRhYThmZiIgc3Ryb2tlLXdpZHRoPSI3IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cmVjdCB4PSI3OTAiIHk9IjI3MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxNjgiIHJ4PSIxNCIgZmlsbD0iIzRhZGU4MCIgZmlsbC1vcGFjaXR5PSIwLjA2IiBzdHJva2U9IiM0YWRlODAiIHN0cm9rZS1vcGFjaXR5PSIwLjM1IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNmY2Y3OCIgc3Ryb2tlLXdpZHRoPSIyLjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNODA2IDI5NCBIOTAwIEM5MjIgMjk0IDk0OCAyOTAgOTQ4IDI5OS41IEM5NDggMzA5IDkyMiAzMDUgOTAwIDMwNSBIODI0IiAvPgogICAgPHBhdGggZD0iTTgwNiAzMTYgSDkwMCBDOTIyIDMxNiA5NDggMzEyIDk0OCAzMjEuNSBDOTQ4IDMzMSA5MjIgMzI3IDkwMCAzMjcgSDgyNCIgLz4KICAgIDxwYXRoIGQ9Ik04MDYgMzM4IEg5MDAgQzkyMiAzMzggOTQ4IDMzNCA5NDggMzQzLjUgQzk0OCAzNTMgOTIyIDM0OSA5MDAgMzQ5IEg4MjQiIC8+CiAgICA8cGF0aCBkPSJNODA2IDM2MCBIOTAwIEM5MjIgMzYwIDk0OCAzNTYgOTQ4IDM2NS41IEM5NDggMzc1IDkyMiAzNzEgOTAwIDM3MSBIODI0IiAvPgogICAgPHBhdGggZD0iTTgwNiAzODIgSDkwMCBDOTIyIDM4MiA5NDggMzc4IDk0OCAzODcuNSBDOTQ4IDM5NyA5MjIgMzkzIDkwMCAzOTMgSDgyNCIgLz4KICA8L2c+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYjlmNWNmIiBzdHJva2Utb3BhY2l0eT0iMC40NSIgc3Ryb2tlLXdpZHRoPSIwLjgiPgogICAgPHBhdGggZD0iTTgwNiAyOTQgSDkwMCBDOTIyIDI5NCA5NDggMjkwIDk0OCAyOTkuNSBDOTQ4IDMwOSA5MjIgMzA1IDkwMCAzMDUgSDgyNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMC44KSIvPgogICAgPHBhdGggZD0iTTgwNiAzMTYgSDkwMCBDOTIyIDMxNiA5NDggMzEyIDk0OCAzMjEuNSBDOTQ4IDMzMSA5MjIgMzI3IDkwMCAzMjcgSDgyNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMC44KSIvPgogICAgPHBhdGggZD0iTTgwNiAzMzggSDkwMCBDOTIyIDMzOCA5NDggMzM0IDk0OCAzNDMuNSBDOTQ4IDM1MyA5MjIgMzQ5IDkwMCAzNDkgSDgyNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMC44KSIvPgogICAgPHBhdGggZD0iTTgwNiAzNjAgSDkwMCBDOTIyIDM2MCA5NDggMzU2IDk0OCAzNjUuNSBDOTQ4IDM3NSA5MjIgMzcxIDkwMCAzNzEgSDgyNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMC44KSIvPgogICAgPHBhdGggZD0iTTgwNiAzODIgSDkwMCBDOTIyIDM4MiA5NDggMzc4IDk0OCAzODcuNSBDOTQ4IDM5NyA5MjIgMzkzIDkwMCAzOTMgSDgyNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMC44KSIvPgogIDwvZz4KICA8ZyBmaWxsPSIjMmE5ZDVhIiBzdHJva2U9IiMxMjNkMjQiIHN0cm9rZS13aWR0aD0iMC41Ij48cmVjdCB4PSI4NjMuNSIgeT0iMjkxLjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODYzLjUiIHk9IjMwMi41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjxyZWN0IHg9Ijg2My41IiB5PSIzMTMuNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgcng9IjEiLz48cmVjdCB4PSI4NjMuNSIgeT0iMzI0LjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODYzLjUiIHk9IjMzNS41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjxyZWN0IHg9Ijg2My41IiB5PSIzNDYuNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgcng9IjEiLz48cmVjdCB4PSI4NjMuNSIgeT0iMzU3LjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODYzLjUiIHk9IjM2OC41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjxyZWN0IHg9Ijg2My41IiB5PSIzNzkuNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgcng9IjEiLz48cmVjdCB4PSI4NjMuNSIgeT0iMzkwLjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODk3LjUiIHk9IjI5MS41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjxyZWN0IHg9Ijg5Ny41IiB5PSIzMDIuNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgcng9IjEiLz48cmVjdCB4PSI4OTcuNSIgeT0iMzEzLjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODk3LjUiIHk9IjMyNC41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjxyZWN0IHg9Ijg5Ny41IiB5PSIzMzUuNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgcng9IjEiLz48cmVjdCB4PSI4OTcuNSIgeT0iMzQ2LjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODk3LjUiIHk9IjM1Ny41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjxyZWN0IHg9Ijg5Ny41IiB5PSIzNjguNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgcng9IjEiLz48cmVjdCB4PSI4OTcuNSIgeT0iMzc5LjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIHJ4PSIxIi8+PHJlY3QgeD0iODk3LjUiIHk9IjM5MC41IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiByeD0iMSIvPjwvZz4KICA8cmVjdCB4PSI4MTgiIHk9IjI4MiIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyOCIgcng9IjYiIGZpbGw9InVybCgjaGRyKSIvPgogIDxyZWN0IHg9IjgwMCIgeT0iMjc2IiB3aWR0aD0iMTIiIGhlaWdodD0iMTIyIiByeD0iNiIgZmlsbD0idXJsKCNoZHIpIi8+CiAgPGcgZmlsbD0iIzJhOWQ1YSI+PGNpcmNsZSBjeD0iODEyIiBjeT0iMjk0IiByPSIyLjIiLz48Y2lyY2xlIGN4PSI4MzAiIGN5PSIzMDUiIHI9IjIuMiIvPjxjaXJjbGUgY3g9IjgxMiIgY3k9IjMxNiIgcj0iMi4yIi8+PGNpcmNsZSBjeD0iODMwIiBjeT0iMzI3IiByPSIyLjIiLz48Y2lyY2xlIGN4PSI4MTIiIGN5PSIzMzgiIHI9IjIuMiIvPjxjaXJjbGUgY3g9IjgzMCIgY3k9IjM0OSIgcj0iMi4yIi8+PGNpcmNsZSBjeD0iODEyIiBjeT0iMzYwIiByPSIyLjIiLz48Y2lyY2xlIGN4PSI4MzAiIGN5PSIzNzEiIHI9IjIuMiIvPjxjaXJjbGUgY3g9IjgxMiIgY3k9IjM4MiIgcj0iMi4yIi8+PGNpcmNsZSBjeD0iODMwIiBjeT0iMzkzIiByPSIyLjIiLz48L2c+CiAgPHRleHQgeD0iODgwIiB5PSI0MjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlOGVjZjUiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI2MDAiPk1hdHkga2FwaWxhcm5lPC90ZXh0Pgo8L3N2Zz4K
+      elements:
+      - type: state-label
+        entity: sensor.temperatura_gorna_noel_sonoff_snzb_02ld
+        style:
+          left: 60.2%
+          top: 25.0%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#f2f4f8'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(8px,1.8vw,19px)
+      - type: state-label
+        entity: sensor.temperatura_srodek_noel_sonoff_snzb_02ld
+        style:
+          left: 60.2%
+          top: 50.9%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#f2f4f8'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(8px,1.8vw,19px)
+      - type: state-label
+        entity: sensor.temperatura_dol_noel_sonoff_snzb_02ld
+        style:
+          left: 60.2%
+          top: 76.8%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#f2f4f8'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(8px,1.8vw,19px)
+      - type: state-label
+        entity: sensor.temperatura_cwu
+        style:
+          left: 34.0%
+          top: 31.8%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#ff9a85'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6.5px,1.45vw,15px)
+        prefix: 'zasilanie '
+      - type: state-label
+        entity: sensor.heiko_tui_woda_wejscie
+        style:
+          left: 34.0%
+          top: 63.7%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#8cc8ff'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6.5px,1.45vw,15px)
+        prefix: 'powrót '
+      - type: state-label
+        entity: sensor.maszynownia_czujnik_temperatury_cyrkulacja_cwu
+        style:
+          left: 76.0%
+          top: 39.3%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#c4cbda'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6px,1.15vw,12px)
+      - type: state-label
+        entity: sensor.temperatura_zewnetrzna_finalna
+        style:
+          left: 15.1%
+          top: 25.2%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#c4cbda'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6px,1.15vw,12px)
+        prefix: 'na zewnątrz '
+      - type: state-label
+        entity: sensor.tze284_dikb3dp6_ts0601_total_power
+        style:
+          left: 10.5%
+          top: 76.6%
+          background: transparent
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#6ee79a'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6.5px,1.45vw,15px)
+      - type: state-label
+        entity: sensor.heiko_sprezarka_czestotliwosc
+        style:
+          left: 19.8%
+          top: 76.6%
+          background: transparent
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#c4cbda'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6.5px,1.45vw,15px)
+      - type: state-label
+        entity: select.heiko_tryb_pracy_pompy
+        style:
+          left: 15.1%
+          top: 88.8%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#f2f4f8'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6.5px,1.45vw,15px)
+      - type: state-label
+        entity: sensor.heiko_harmonogram_status
+        style:
+          left: 15.1%
+          top: 93.9%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#c4cbda'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6px,1.15vw,12px)
+      - type: state-label
+        entity: sensor.salonkuchnia_salon_temperatura
+        style:
+          left: 88.0%
+          top: 45.4%
+          background: rgba(12,14,19,0.80)
+          clip-path: inset(5px 1px round 999px)
+          line-height: '1.25'
+          color: '#c4cbda'
+          font-weight: '600'
+          white-space: nowrap
+          font-size: clamp(6px,1.15vw,12px)
+        prefix: 'salon '
+      - type: conditional
+        conditions:
+        - entity: binary_sensor.pompa_ciepla_status
+          state: 'on'
+        elements:
+        - type: icon
+          icon: mdi:fan
+          tap_action:
+            action: more-info
+          entity: binary_sensor.pompa_ciepla_status
+          style:
+            left: 15.1%
+            top: 38.4%
+            color: '#4ade80'
+            --mdc-icon-size: clamp(12px,3vw,32px)
+            filter: 'drop-shadow(0 0 6px #4ade80)'
+      - type: conditional
+        conditions:
+        - entity: binary_sensor.pompa_ciepla_status
+          state: 'on'
+        elements:
+        - type: icon
+          icon: mdi:fan
+          tap_action:
+            action: more-info
+          entity: binary_sensor.pompa_ciepla_status
+          style:
+            left: 15.1%
+            top: 60.4%
+            color: '#4ade80'
+            --mdc-icon-size: clamp(12px,3vw,32px)
+            filter: 'drop-shadow(0 0 6px #4ade80)'
+      - type: conditional
+        conditions:
+        - entity: sensor.heiko_odszranianie
+          state: '1'
+        elements:
+        - type: icon
+          icon: mdi:snowflake-melt
+          tap_action:
+            action: more-info
+          entity: sensor.heiko_odszranianie
+          style:
+            left: 24.0%
+            top: 25.2%
+            color: '#7dd3fc'
+            --mdc-icon-size: clamp(11px,2.4vw,24px)
+            filter: 'drop-shadow(0 0 6px #7dd3fc)'
+      - type: conditional
+        conditions:
+        - entity: sensor.heiko_tryb_pracy
+          state: '1'
+        elements:
+        - type: icon
+          icon: mdi:fire
+          tap_action:
+            action: more-info
+          entity: sensor.heiko_tryb_pracy
+          style:
+            left: 76.0%
+            top: 15.4%
+            color: '#ff7a45'
+            --mdc-icon-size: clamp(11px,2.4vw,24px)
+            filter: 'drop-shadow(0 0 6px #ff7a45)'
+      - type: conditional
+        conditions:
+        - entity: sensor.heiko_tryb_pracy
+          state: '2'
+        elements:
+        - type: icon
+          icon: mdi:heat-wave
+          tap_action:
+            action: more-info
+          entity: sensor.heiko_tryb_pracy
+          style:
+            left: 47.0%
+            top: 21.4%
+            color: '#ff9f43'
+            --mdc-icon-size: clamp(11px,2.4vw,24px)
+            filter: 'drop-shadow(0 0 6px #ff9f43)'
+      grid_options:
+        columns: full
+  - type: grid
+    cards:
+    - type: heading
+      heading: Sterowanie
+      icon: mdi:tune-variant
+    - type: tile
+      entity: select.heiko_tryb_pracy_pompy
+      name: Tryb pracy
+      icon: mdi:heat-pump-outline
+      features:
+      - type: select-options
+      grid_options:
+        columns: 12
+      features_position: bottom
+      vertical: false
+    - type: tile
+      entity: switch.heiko_pompa_wlaczona
+      name: Pompa
+      grid_options:
+        columns: 6
+    - type: tile
+      entity: input_boolean.heiko_harmonogram
+      name: Harmonogram
+      grid_options:
+        columns: 6
+    - type: tile
+      entity: input_datetime.heiko_ogrzewanie_od
+      name: Ogrzewanie od
+      icon: mdi:radiator
+      grid_options:
+        columns: 6
+    - type: tile
+      entity: input_datetime.heiko_auto_od
+      name: Auto od
+      icon: mdi:water-boiler
+      grid_options:
+        columns: 6
+    - type: tile
+      entity: sensor.heiko_harmonogram_status
+      name: Status harmonogramu
+      grid_options:
+        columns: 12
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Bufor NOEL – 24 h
+      icon: mdi:thermometer-water
+    - type: history-graph
+      hours_to_show: 24
+      grid_options:
+        columns: full
+        rows: 5
+      entities:
+      - entity: sensor.temperatura_gorna_noel_sonoff_snzb_02ld
+        name: Góra
+      - entity: sensor.temperatura_srodek_noel_sonoff_snzb_02ld
+        name: Środek
+      - entity: sensor.temperatura_dol_noel_sonoff_snzb_02ld
+        name: Dół
+      - entity: sensor.temperatura_cwu
+        name: Zasilanie z PC
+      - entity: sensor.heiko_tw_zasobnik_cwu
+        name: TW (sterownik)
+    - type: history-graph
+      hours_to_show: 24
+      grid_options:
+        columns: full
+        rows: 2
+      entities:
+      - entity: select.heiko_tryb_pracy_pompy
+        name: Tryb
+      - entity: binary_sensor.pompa_ciepla_status
+        name: Sprężarka
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Pompa – 24 h
+      icon: mdi:chart-line
+    - type: gauge
+      entity: sensor.tze284_dikb3dp6_ts0601_total_power
+      name: Pobór mocy
+      min: 0
+      max: 6000
+      needle: true
+      severity:
+        green: 0
+        yellow: 4000
+        red: 5500
+      grid_options:
+        columns: 6
+        rows: 3
+    - type: gauge
+      entity: sensor.heiko_sprezarka_czestotliwosc
+      name: Sprężarka
+      unit: Hz
+      min: 0
+      max: 100
+      needle: true
+      grid_options:
+        columns: 6
+        rows: 3
+    - type: history-graph
+      hours_to_show: 24
+      grid_options:
+        columns: full
+        rows: 4
+      entities:
+      - entity: sensor.tze284_dikb3dp6_ts0601_total_power
+        name: Pobór mocy
+    - type: tile
+      entity: sensor.pompa_ciepla_starty_dzis_co_cwu
+      name: Starty dziś (CO / CWU)
+      icon: mdi:restart
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.pompa_ciepla_dzisiaj
+      name: Praca dziś
+      icon: mdi:timer-outline
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_odszraniania_dzis
+      name: Odszraniania dziś
+      icon: mdi:snowflake-melt
+      grid_options:
+        columns: 4
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Zużycie energii
+      icon: mdi:lightning-bolt
+    - type: statistics-graph
+      entities:
+      - entity: sensor.tze284_dikb3dp6_ts0601_energia
+        name: Pompa ciepła
+        color: '#4ade80'
+      stat_types:
+      - change
+      chart_type: bar
+      period: day
+      days_to_show: 14
+      grid_options:
+        columns: full
+        rows: 5
+    - type: horizontal-stack
+      grid_options:
+        columns: full
+      cards:
+      - type: tile
+        entity: sensor.pompa_ciepla_zuzycie_w_miesiacu
+        name: Ten miesiąc
+        icon: mdi:calendar-month
+        color: green
+        vertical: true
+      - type: tile
+        entity: sensor.pompa_ciepla_srednio_dziennie_w_miesiacu
+        name: Średnio / dzień
+        icon: mdi:chart-bell-curve-cumulative
+        color: green
+        vertical: true
+      - type: tile
+        entity: sensor.pompa_ciepla_zuzycie_wczoraj
+        name: Wczoraj
+        icon: mdi:calendar-today
+        color: green
+        vertical: true
+      - type: tile
+        entity: sensor.pompa_ciepla_kwh_na_stopien
+        name: kWh/stopień (wczoraj)
+        icon: mdi:thermometer-lines
+        color: green
+        vertical: true
+    - type: heading
+      heading: Efektywność
+      heading_style: subtitle
+    - type: statistics-graph
+      title: kWh na stopień różnicy temperatur
+      entities:
+      - entity: heiko_thermal:kwh_na_stopien
+        name: kWh/K
+        color: '#4ade80'
+      stat_types:
+      - mean
+      chart_type: bar
+      period: day
+      days_to_show: 30
+      grid_options:
+        columns: full
+        rows: 5
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Obieg czynnika
+      icon: mdi:molecule
+    - type: tile
+      entity: sensor.heiko_td_temperatura_tloczenia
+      name: Td tłoczenie
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_ts_temperatura_ssania
+      name: Ts ssanie
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_tp_temperatura_parownika
+      name: Tp parownik
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_pd_cisnienie_tloczenia
+      name: Pd
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_ps_cisnienie_ssania
+      name: Ps
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_zawor_rozprezny_otwarcie
+      name: EEV
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_sprezarka_prad
+      name: Prąd sprężarki
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_wentylator_1
+      name: Wentylator
+      grid_options:
+        columns: 4
+    - type: tile
+      entity: sensor.heiko_tuo_woda_wyjscie
+      name: Tuo
+      grid_options:
+        columns: 4

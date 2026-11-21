@@ -1,0 +1,390 @@
+{
+  "title": "Pompa ciepła",
+  "views": [
+    {
+      "title": "Pompa ciepła",
+      "path": "pompa",
+      "icon": "mdi:heat-pump",
+      "type": "masonry",
+      "cards": [
+        {
+          "type": "vertical-stack",
+          "cards": [
+            {
+              "type": "custom:mushroom-template-card",
+              "primary": "Pompa ciepła Heiko",
+              "secondary": "{% if states('sensor.heiko_tuo_woda_wyjscie') in ['unavailable','unknown'] %}Brak danych z pompy{% elif states('sensor.heiko_sprezarka_czestotliwosc')|float(0) > 0 %}Sprężarka {{ states('sensor.heiko_sprezarka_czestotliwosc')|int(0) }} Hz · {{ states('sensor.heiko_sprezarka_prad') }} A · {{ states('sensor.pompa_ciepla_moc')|int(0) }} W{% else %}Postój{% endif %}\nTryb: {{ states('sensor.heiko_tryb_pracy_opis') }} · zadana {{ states('sensor.heiko_temperatura_zadana_biezacy_tryb')|int(0) }} °C{% if is_state('binary_sensor.heiko_odszranianie_aktywne', 'on') %} · odszranianie{% endif %}",
+              "icon": "mdi:heat-pump",
+              "icon_color": "{% if states('sensor.heiko_tuo_woda_wyjscie') in ['unavailable','unknown'] %}grey{% elif states('sensor.heiko_sprezarka_czestotliwosc')|float(0) > 0 %}green{% else %}blue-grey{% endif %}",
+              "multiline_secondary": true,
+              "entity": "sensor.heiko_sprezarka_czestotliwosc",
+              "tap_action": {
+                "action": "more-info"
+              },
+              "badge_icon": "{% if states('sensor.heiko_sprezarka_czestotliwosc')|float(0) > 0 %}mdi:fan{% endif %}",
+              "badge_color": "green"
+            },
+            {
+              "type": "entities",
+              "title": "Sterowanie (lokalnie)",
+              "entities": [
+                {
+                  "entity": "switch.heiko_pompa_wlaczona",
+                  "name": "Pompa włączona"
+                },
+                {
+                  "entity": "select.heiko_tryb_pracy_pompy",
+                  "name": "Tryb pracy"
+                },
+                {
+                  "entity": "input_boolean.heiko_harmonogram",
+                  "name": "Harmonogram"
+                },
+                {
+                  "entity": "input_datetime.heiko_ogrzewanie_od",
+                  "name": "Ogrzewanie od"
+                },
+                {
+                  "entity": "input_datetime.heiko_auto_od",
+                  "name": "Auto (CO + CWU) od"
+                },
+                {
+                  "entity": "sensor.heiko_tryb_wg_harmonogramu",
+                  "name": "Wg harmonogramu"
+                }
+              ]
+            },
+            {
+              "type": "custom:mushroom-chips-card",
+              "alignment": "center",
+              "chips": [
+                {
+                  "type": "template",
+                  "icon": "mdi:sun-thermometer",
+                  "content": "{{ states('sensor.heiko_temperatura_zewnetrzna')|round(1, default='–') }} °C",
+                  "entity": "sensor.heiko_temperatura_zewnetrzna",
+                  "tap_action": {
+                    "action": "more-info"
+                  }
+                },
+                {
+                  "type": "template",
+                  "icon": "mdi:home-thermometer",
+                  "content": "{{ states('sensor.heiko_temperatura_pokojowa') }} °C",
+                  "entity": "sensor.heiko_temperatura_pokojowa",
+                  "tap_action": {
+                    "action": "more-info"
+                  }
+                },
+                {
+                  "type": "template",
+                  "icon": "mdi:pump",
+                  "icon_color": "{{ 'green' if states('sensor.heiko_pompa_p0')|float(0) > 0 else 'grey' }}",
+                  "content": "P0"
+                },
+                {
+                  "type": "template",
+                  "icon": "mdi:pump",
+                  "icon_color": "{{ 'green' if states('sensor.heiko_pompa_p1')|float(0) > 0 else 'grey' }}",
+                  "content": "P1"
+                },
+                {
+                  "type": "template",
+                  "icon": "mdi:sync",
+                  "icon_color": "{{ 'green' if states('sensor.heiko_pompa_obiegowa_praca')|float(0) > 0 else 'grey' }}",
+                  "content": "Obieg",
+                  "entity": "sensor.heiko_pompa_obiegowa_praca",
+                  "tap_action": {
+                    "action": "more-info"
+                  }
+                },
+                {
+                  "type": "template",
+                  "icon": "mdi:snowflake-melt",
+                  "icon_color": "{{ 'blue' if is_state('binary_sensor.heiko_odszranianie_aktywne', 'on') else 'grey' }}",
+                  "content": "{{ states('sensor.heiko_odszraniania_dzis')|int(0) }}× dziś",
+                  "entity": "sensor.heiko_odszraniania_dzis",
+                  "tap_action": {
+                    "action": "more-info"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "custom:mushroom-template-card",
+              "primary": "Grzałki",
+              "secondary": "AH {{ states('sensor.heiko_grzalka_ah_czas_pracy')|int(0) }} min · HWTBH {{ states('sensor.heiko_grzalka_hwtbh_czas_pracy')|int(0) }} min · HBH {{ states('sensor.heiko_grzalka_hbh_czas_pracy')|int(0) }} min\n{% set t = state_attr('automation.pompa_ciepla_grzalka_pracuje', 'last_triggered') %}{% if t %}Ostatnio pracowała: {{ as_local(t).strftime('%d.%m %H:%M') }}{% else %}Bez pracy od uruchomienia monitoringu{% endif %}",
+              "icon": "mdi:heating-coil",
+              "icon_color": "{% set t = state_attr('automation.pompa_ciepla_grzalka_pracuje', 'last_triggered') %}{{ 'red' if t and (now() - t).total_seconds() < 7200 else 'grey' }}",
+              "multiline_secondary": true,
+              "entity": "sensor.heiko_grzalka_ah_czas_pracy",
+              "tap_action": {
+                "action": "more-info"
+              }
+            }
+          ]
+        },
+        {
+          "type": "vertical-stack",
+          "cards": [
+            {
+              "type": "custom:mushroom-template-card",
+              "primary": "Ciepła woda (CWU)",
+              "secondary": "{{ states('sensor.heiko_tw_zasobnik_cwu')|round(1, default='–') }} °C{% if is_state('sensor.heiko_tryb_pracy', '1') %} · grzanie do {{ states('sensor.heiko_temperatura_zadana_biezacy_tryb')|int(0) }} °C{% endif %}",
+              "icon": "mdi:water-boiler",
+              "icon_color": "{{ 'red' if is_state('sensor.heiko_tryb_pracy', '1') else 'blue' }}",
+              "multiline_secondary": true,
+              "entity": "sensor.heiko_tw_zasobnik_cwu",
+              "tap_action": {
+                "action": "more-info"
+              },
+              "badge_icon": "{% if is_state('sensor.heiko_tryb_pracy', '1') %}mdi:fire{% endif %}",
+              "badge_color": "red"
+            },
+            {
+              "type": "custom:mini-graph-card",
+              "name": "CWU – 24 h",
+              "hours_to_show": 24,
+              "points_per_hour": 4,
+              "line_width": 2,
+              "smoothing": true,
+              "show": {
+                "legend": true,
+                "fill": "fade",
+                "labels": false
+              },
+              "entities": [
+                {
+                  "entity": "sensor.heiko_tw_zasobnik_cwu",
+                  "name": "TW zasobnik",
+                  "color": "#e74c3c"
+                },
+                {
+                  "entity": "sensor.heiko_tryb_pracy",
+                  "name": "Grzanie CWU",
+                  "color": "#f1c40f",
+                  "y_axis": "secondary",
+                  "show_line": false,
+                  "show_points": false,
+                  "show_fill": true,
+                  "show_legend": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "vertical-stack",
+          "cards": [
+            {
+              "type": "custom:mushroom-template-card",
+              "primary": "Woda grzewcza",
+              "secondary": "Tuo {{ states('sensor.heiko_tuo_woda_wyjscie')|round(1, default='–') }} · Tui {{ states('sensor.heiko_tui_woda_wejscie')|round(1, default='–') }} · ΔT {{ (states('sensor.heiko_tuo_woda_wyjscie')|float(0) - states('sensor.heiko_tui_woda_wejscie')|float(0))|round(1, default='–') }} K\nBufor Tc {{ states('sensor.heiko_tc_bufor')|round(1, default='–') }} °C · Tv1 {{ states('sensor.heiko_tv1_obieg_1')|round(1, default='–') }} · Tv2 {{ states('sensor.heiko_tv2_obieg_2')|round(1, default='–') }} °C",
+              "icon": "mdi:radiator",
+              "icon_color": "orange",
+              "multiline_secondary": true,
+              "entity": "sensor.heiko_tuo_woda_wyjscie",
+              "tap_action": {
+                "action": "more-info"
+              }
+            },
+            {
+              "type": "custom:mini-graph-card",
+              "name": "Temperatury wody – 24 h",
+              "hours_to_show": 24,
+              "points_per_hour": 4,
+              "line_width": 2,
+              "smoothing": true,
+              "show": {
+                "legend": true,
+                "fill": false,
+                "labels": false
+              },
+              "entities": [
+                {
+                  "entity": "sensor.heiko_tuo_woda_wyjscie",
+                  "name": "Tuo wyjście",
+                  "color": "#e67e22"
+                },
+                {
+                  "entity": "sensor.heiko_tui_woda_wejscie",
+                  "name": "Tui wejście",
+                  "color": "#3498db"
+                },
+                {
+                  "entity": "sensor.heiko_tc_bufor",
+                  "name": "Tc bufor",
+                  "color": "#9b59b6"
+                },
+                {
+                  "entity": "sensor.heiko_tv1_obieg_1",
+                  "name": "Tv1",
+                  "color": "#1abc9c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "vertical-stack",
+          "cards": [
+            {
+              "type": "custom:mini-graph-card",
+              "name": "Sprężarka i pobór mocy – 24 h",
+              "hours_to_show": 24,
+              "points_per_hour": 6,
+              "line_width": 2,
+              "smoothing": true,
+              "show": {
+                "legend": true,
+                "fill": false,
+                "labels": false
+              },
+              "entities": [
+                {
+                  "entity": "sensor.pompa_ciepla_moc",
+                  "name": "Moc sprężarki (W)",
+                  "color": "#27ae60"
+                },
+                {
+                  "entity": "sensor.heiko_sprezarka_czestotliwosc",
+                  "name": "Częstotliwość (Hz)",
+                  "color": "#f39c12",
+                  "y_axis": "secondary"
+                }
+              ]
+            },
+            {
+              "type": "horizontal-stack",
+              "cards": [
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_pd_cisnienie_tloczenia",
+                  "name": "Pd",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:gauge-full"
+                },
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_ps_cisnienie_ssania",
+                  "name": "Ps",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:gauge-low"
+                },
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_zawor_rozprezny_otwarcie",
+                  "name": "EEV",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:valve"
+                }
+              ]
+            },
+            {
+              "type": "horizontal-stack",
+              "cards": [
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_td_temperatura_tloczenia",
+                  "name": "Td",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:thermometer-high"
+                },
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_ts_temperatura_ssania",
+                  "name": "Ts",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:thermometer-low"
+                },
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_tp_temperatura_parownika",
+                  "name": "Tp",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:snowflake-thermometer"
+                }
+              ]
+            },
+            {
+              "type": "horizontal-stack",
+              "cards": [
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_wentylator_1",
+                  "name": "Wentylator",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:fan"
+                },
+                {
+                  "type": "custom:mushroom-entity-card",
+                  "entity": "sensor.heiko_napiecie_zasilania",
+                  "name": "Napięcie",
+                  "tap_action": {
+                    "action": "more-info"
+                  },
+                  "icon": "mdi:flash"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "custom:mini-graph-card",
+          "name": "Temperatura zewnętrzna – 48 h",
+          "hours_to_show": 48,
+          "points_per_hour": 2,
+          "line_width": 2,
+          "smoothing": true,
+          "show": {
+            "legend": true,
+            "fill": false,
+            "labels": false
+          },
+          "entities": [
+            {
+              "entity": "sensor.heiko_temperatura_zewnetrzna",
+              "name": "Na zewnątrz",
+              "color": "#2980b9"
+            },
+            {
+              "entity": "sensor.heiko_temperatura_pokojowa",
+              "name": "Pokój",
+              "color": "#c0392b"
+            }
+          ]
+        },
+        {
+          "type": "statistics-graph",
+          "title": "Zużycie energii pompy – dziennie",
+          "entities": [
+            {
+              "entity": "sensor.pompa_ciepla_energia",
+              "name": "Pompa ciepła"
+            }
+          ],
+          "stat_types": [
+            "change"
+          ],
+          "chart_type": "bar",
+          "period": "day",
+          "days_to_show": 30
+        }
+      ]
+    }
+  ]
+}

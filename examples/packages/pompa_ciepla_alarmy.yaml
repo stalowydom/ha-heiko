@@ -1,0 +1,209 @@
+# Alarmy pompy ciepła Heiko (dane z integracji heiko_thermal, tylko odczyt)
+# Zamień notify.mobile_app_TELEFON_1/2 na własne usługi powiadomień (Narzędzia deweloperskie -> Akcje -> "notify.").
+
+counter:
+  heiko_alarmy_tydzien:
+    name: Pompa ciepła – alarmy w tym tygodniu
+    icon: mdi:alert-circle-outline
+    restore: true
+
+script:
+  pompa_powiadom:
+    alias: Pompa ciepła – powiadomienie
+    mode: parallel
+    fields:
+      tytul: { description: Tytuł }
+      tresc: { description: Treść }
+      id: { description: Id powiadomienia w HA }
+      licz: { description: Wliczać do licznika alarmów (domyślnie tak) }
+    sequence:
+      - if: "{{ licz | default(true) }}"
+        then:
+          - action: counter.increment
+            target: { entity_id: counter.heiko_alarmy_tydzien }
+      - action: persistent_notification.create
+        data:
+          title: "{{ tytul }}"
+          message: "{{ tresc }}"
+          notification_id: "{{ id | default('heiko_alarm') }}"
+      - action: notify.mobile_app_TELEFON_1
+        data: { title: "{{ tytul }}", message: "{{ tresc }}" }
+        continue_on_error: true
+      - action: notify.mobile_app_TELEFON_2
+        data: { title: "{{ tytul }}", message: "{{ tresc }}" }
+        continue_on_error: true
+
+template:
+  - binary_sensor:
+      - name: Heiko sprężarka pracuje
+        unique_id: heiko_sprezarka_pracuje
+        icon: mdi:heat-pump
+        availability: "{{ has_value('sensor.heiko_sprezarka_czestotliwosc') }}"
+        state: "{{ states('sensor.heiko_sprezarka_czestotliwosc') | float(0) > 0 }}"
+      - name: Heiko odszranianie aktywne
+        unique_id: heiko_odszranianie_aktywne
+        icon: mdi:snowflake-melt
+        availability: "{{ has_value('sensor.heiko_odszranianie') }}"
+        state: "{{ states('sensor.heiko_odszranianie') | float(0) > 0 }}"
+  - sensor:
+      - name: Heiko tryb pracy opis
+        unique_id: heiko_tryb_pracy_opis
+        icon: mdi:state-machine
+        availability: "{{ has_value('sensor.heiko_tryb_pracy') }}"
+        state: >-
+          {% set m = states('sensor.heiko_tryb_pracy') | int(-1) %}
+          {{ {0: 'Postój', 1: 'CWU', 2: 'Ogrzewanie'}.get(m, 'Tryb ' ~ m) }}
+
+sensor:
+  - platform: history_stats
+    name: Heiko starty sprężarki 1 h
+    unique_id: heiko_starty_sprezarki_1h
+    entity_id: binary_sensor.heiko_sprezarka_pracuje
+    state: "on"
+    type: count
+    start: "{{ now() - timedelta(hours=1) }}"
+    end: "{{ now() }}"
+  - platform: history_stats
+    name: Heiko odszraniania dziś
+    unique_id: heiko_odszraniania_dzis
+    entity_id: binary_sensor.heiko_odszranianie_aktywne
+    state: "on"
+    type: count
+    start: "{{ today_at() }}"
+    end: "{{ now() }}"
+  - platform: history_stats
+    name: Heiko odszranianie czas dziś
+    unique_id: heiko_odszranianie_czas_dzis
+    entity_id: binary_sensor.heiko_odszranianie_aktywne
+    state: "on"
+    type: time
+    start: "{{ today_at() }}"
+    end: "{{ now() }}"
+
+automation:
+  - id: heiko_brak_danych
+    alias: Pompa ciepła – brak danych
+    description: Pompa (moduł USR-W600) nie wysyła danych od 10 min.
+    triggers:
+      - trigger: state
+        entity_id: sensor.heiko_tuo_woda_wyjscie
+        to: unavailable
+        for: "00:10:00"
+    actions:
+      - action: script.pompa_powiadom
+        data:
+          tytul: Pompa ciepła – brak danych
+          tresc: >-
+            Od 10 minut brak danych z pompy (moduł Wi-Fi USR-W600).
+            Sprawdź zasilanie pompy i połączenie Wi-Fi.
+          id: heiko_brak_danych
+      - delay: "02:00:00"
+    mode: single
+    max_exceeded: silent
+
+  - id: heiko_tuo_podejrzany
+    alias: Pompa ciepła – podejrzany odczyt Tuo
+    description: Wczesne wykrycie usterki czujnika Tuo (F16) - wartość poza zakresem albo skok.
+    triggers:
+      - trigger: numeric_state
+        entity_id: sensor.heiko_tuo_woda_wyjscie
+        below: 1
+        for: "00:01:00"
+        id: zakres
+      - trigger: numeric_state
+        entity_id: sensor.heiko_tuo_woda_wyjscie
+        above: 65
+        for: "00:01:00"
+        id: zakres
+      - trigger: state
+        entity_id: sensor.heiko_tuo_woda_wyjscie
+        id: skok
+    conditions:
+      - condition: template
+        value_template: >-
+          {% if trigger.id == 'skok' %}
+            {{ trigger.from_state is not none and trigger.to_state is not none
+               and has_value('sensor.heiko_tuo_woda_wyjscie')
+               and trigger.from_state.state | is_number and trigger.to_state.state | is_number
+               and (trigger.to_state.state | float - trigger.from_state.state | float) | abs > 10 }}
+          {% else %}true{% endif %}
+    actions:
+      - action: script.pompa_powiadom
+        data:
+          tytul: Pompa ciepła – podejrzany odczyt Tuo
+          tresc: >-
+            Tuo: {{ trigger.from_state.state if trigger.from_state else '?' }} → {{ trigger.to_state.state }} °C
+            ({{ 'skok o ponad 10 K' if trigger.id == 'skok' else 'poza zakresem 1–65 °C' }}).
+            Tui {{ states('sensor.heiko_tui_woda_wejscie') }} °C, sprężarka {{ states('sensor.heiko_sprezarka_czestotliwosc') }} Hz.
+            Możliwy powrót usterki czujnika Tuo (F16).
+          id: heiko_tuo
+      - delay: "01:00:00"
+    mode: single
+    max_exceeded: silent
+
+  - id: heiko_cwu_za_dlugo
+    alias: Pompa ciepła – CWU grzeje za długo
+    description: Tryb CWU trwa ponad 3 godziny.
+    triggers:
+      - trigger: state
+        entity_id: sensor.heiko_tryb_pracy
+        to: "1"
+        for: "03:00:00"
+    actions:
+      - action: script.pompa_powiadom
+        data:
+          tytul: Pompa ciepła – CWU grzeje ponad 3 h
+          tresc: >-
+            Zasobnik {{ states('sensor.heiko_tw_zasobnik_cwu') }} °C, zadana {{ states('sensor.heiko_temperatura_zadana_biezacy_tryb') }} °C,
+            na zewnątrz {{ states('sensor.heiko_temperatura_zewnetrzna') }} °C, sprężarka {{ states('sensor.heiko_sprezarka_czestotliwosc') }} Hz.
+          id: heiko_cwu
+    mode: single
+
+  - id: heiko_taktowanie
+    alias: Pompa ciepła – taktowanie sprężarki
+    description: Więcej niż 5 startów sprężarki w ciągu godziny.
+    triggers:
+      - trigger: numeric_state
+        entity_id: sensor.heiko_starty_sprezarki_1_h
+        above: 5
+    actions:
+      - action: script.pompa_powiadom
+        data:
+          tytul: Pompa ciepła – częste starty sprężarki
+          tresc: >-
+            {{ states('sensor.heiko_starty_sprezarki_1_h') }} startów w ostatniej godzinie.
+            Na zewnątrz {{ states('sensor.heiko_temperatura_zewnetrzna') }} °C, tryb {{ 'CWU' if is_state('sensor.heiko_tryb_pracy', '1') else 'ogrzewanie' }},
+            Tc {{ states('sensor.heiko_tc_bufor') }} °C / zadana {{ states('sensor.heiko_temperatura_zadana_biezacy_tryb') }} °C.
+            Częste starty skracają życie sprężarki – warto sprawdzić histerezę i krzywą grzewczą.
+          id: heiko_taktowanie
+      - delay: "03:00:00"
+    mode: single
+    max_exceeded: silent
+
+  # Pompa wyłączona (standby) – harmonogram jej nie włącza, więc daj znać
+  - id: heiko_alarm_standby
+    alias: Pompa ciepła – alarm standby
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: switch.heiko_pompa_wlaczona
+        to: "off"
+        for: "00:02:00"
+        id: "off"
+      - trigger: time
+        at: input_datetime.heiko_auto_od
+        id: harmonogram
+      - trigger: time
+        at: input_datetime.heiko_ogrzewanie_od
+        id: harmonogram
+    conditions:
+      - condition: state
+        entity_id: switch.heiko_pompa_wlaczona
+        state: "off"
+    actions:
+      - action: notify.mobile_app_TELEFON_1
+        data:
+          title: Pompa ciepła w standby
+          message: >-
+            {% if trigger.id == 'off' %}Pompa została wyłączona (standby). Nie grzeje CO ani CWU.
+            {%- else %}Pompa nadal w standby – harmonogram jej nie włączy. Nie grzeje CO ani CWU.{% endif %}
