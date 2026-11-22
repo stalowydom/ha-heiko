@@ -204,6 +204,21 @@ views:
       name: Plan pracy
       grid_options:
         columns: full
+    - type: heading
+      heading: Nastawy pompy
+      heading_style: subtitle
+    - type: tile
+      entity: number.heiko_temperatura_co
+      name: Temperatura CO
+    - type: tile
+      entity: number.heiko_histereza_co
+      name: Histereza CO
+    - type: tile
+      entity: number.heiko_temperatura_cwu
+      name: Temperatura CWU
+    - type: tile
+      entity: number.heiko_histereza_cwu
+      name: Histereza CWU
   - type: grid
     column_span: 2
     cards:

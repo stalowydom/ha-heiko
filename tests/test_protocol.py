@@ -40,3 +40,13 @@ def test_cloud_acks_rebuild_byte_exact():
         assert frame[:2] == b"\x55\xaa" and frame[-1] == 0x3A and frame[12] == cmd
         assert frame[10:12] == b"\x01\x00"
         assert int.from_bytes(frame[13:15], "little") == crc16_modbus(frame[2:13])
+
+
+def test_number_ranges():
+    from const import is_writable
+
+    assert is_writable(55, 8.0) and is_writable(54, 48.0) and is_writable(37, 37.0) and is_writable(20, 5.0)
+    assert not is_writable(55, 1.0)  # below range
+    assert not is_writable(54, 70.0)  # above range
+    assert not is_writable(55, 8.5)  # not a whole step
+    assert not is_writable(16, 7.0)  # not whitelisted

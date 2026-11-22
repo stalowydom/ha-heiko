@@ -257,6 +257,22 @@ Obserwacje:
 
 **Po podsłuchu** przywróć w USR-W600 Socket B na `www.myheatpump.com` (port 18899) i zatrzymaj pośrednika. Sterowanie z HA idzie przez Socket A i pośrednik nie jest do tego potrzebny.
 
+
+### Nastawy temperatur (od wersji 0.5.0)
+
+Z `allow_write: true` integracja tworzy cztery encje `number`. Numer parametru to numer pola `parN` na stronie MyHeatPump minus 1 (sprawdzone z panelem WWW 22.11.2026):
+
+| Encja | Parametr | Pole na stronie MyHeatPump | Zakres |
+|---|---|---|---|
+| `number.heiko_temperatura_co` | p037 | Set temp. for Heating (without heating curve) | 20–55 °C |
+| `number.heiko_histereza_co` | p020 | Heating/Cooling Restarts Based on Water ∆T | 2–10 K |
+| `number.heiko_temperatura_cwu` | p054 | Setpoint DHW | 35–55 °C |
+| `number.heiko_histereza_cwu` | p055 | DHW Restart ∆T Setting | 2–15 K |
+
+Zapis wartości spoza zakresu albo niecałkowitej jest odrzucany. Temperatura CO działa, gdy krzywa grzewcza jest wyłączona; przy włączonej krzywej pompa liczy temperaturę z punktów krzywej (p024–p033).
+
+Histereza oznacza spadek temperatury, po którym pompa znowu startuje. Przykład: CWU 48 °C i histereza 9 K → start, gdy czujnik zasobnika (Tw) spadnie poniżej 39 °C. Tw jest zwykle w połowie wysokości zasobnika, więc góra bywa wtedy już wyraźnie chłodniejsza od nastawy.
+
 ## Struktura repozytorium
 
 ```

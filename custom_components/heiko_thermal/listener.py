@@ -12,7 +12,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import dt as dt_util
 
-from .const import WRITABLE
+from .const import is_writable
 from .protocol import build_command, build_write, extract_frames_ex
 
 # The MyHeatPump cloud answers every pump frame with a short acknowledgement:
@@ -171,7 +171,7 @@ class HeikoListener:
         """Write one setting the same way the MyHeatPump cloud does, then wait for the pump to confirm it."""
         if not self.allow_write:
             raise HomeAssistantError("Zapis wyłączony: ustaw allow_write: true w konfiguracji heiko_thermal")
-        if value not in WRITABLE.get(index, set()):
+        if not is_writable(index, value):
             raise HomeAssistantError(f"Parametr p{index:03d} = {value} nie jest na liście dozwolonych zapisów")
         async with self._write_lock:
             for attempt in (1, 2):

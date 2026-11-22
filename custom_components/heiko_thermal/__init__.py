@@ -1,7 +1,7 @@
 """Heiko Thermal heat pump over the USR-W600 module (Socket A, local).
 
-Reads the frames the pump pushes. With allow_write: true it can also switch the pump on/off and change
-the working mode, using the same write frames the MyHeatPump cloud sends (captured 2026-11-15).
+Reads the frames the pump pushes. With allow_write: true it can also switch the pump on/off, change
+the working mode and the CO/DHW setpoints and restart hysteresis, using the same write frames the MyHeatPump cloud sends (captured 2026-11-15).
 """
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     hass.data[DOMAIN] = listener
     platforms = [Platform.SENSOR]
     if conf[CONF_ALLOW_WRITE]:
-        platforms += [Platform.SELECT, Platform.SWITCH]
+        platforms += [Platform.SELECT, Platform.SWITCH, Platform.NUMBER]
     for platform in platforms:
         hass.async_create_task(async_load_platform(hass, platform, DOMAIN, {}, config))
     listener.start()
