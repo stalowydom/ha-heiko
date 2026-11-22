@@ -142,13 +142,19 @@ Plik rośnie o ok. 450 wierszy dziennie. Usuń go albo wyłącz `UNKNOWN_FLAGS`,
 | `packages/pompa_ciepla_alarmy.yaml` | skrypt `pompa_powiadom` (licznik alarmów, powiadomienie w HA i na telefony), sensory pomocnicze (sprężarka pracuje, odszranianie, tryb opisowo, starty/h, odszraniania dziś) i alarmy: brak danych 10 min, podejrzany Tuo (poza 1–65 °C albo skok >10 K, wczesne wykrycie usterki czujnika), CWU >3 h, taktowanie >5 startów/h |
 | `packages/pompa_ciepla_harmonogram.yaml` | harmonogram trybu: Ogrzewanie nocą, Auto wieczorem; godziny w UI; wymaga `allow_write: true` (punkt 12) |
 | `automations_grzalka.yaml` | powiadomienie, gdy którakolwiek grzałka zaczyna pracować |
-| `dashboard/pompa_ciepla_panel.yaml` | **nowy panel**: schemat instalacji z odczytami na żywo (pompa, bufor z 3 czujnikami, CWU, maty), sterowanie trybem i harmonogramem, wykresy, wskaźniki, zużycie energii; **tylko wbudowane karty HA**, bez HACS |
-| `dashboard/schemat.svg` | źródło grafiki schematu (w panelu jest osadzona, nie trzeba jej kopiować) |
+| `dashboard/pompa_ciepla_panel.yaml` | **panel ogólny**: schemat (pompa, zawór trójdrogowy, zasobnik CWU, obieg grzewczy) z odczytami na żywo, sterowanie i harmonogram, wykresy temperatur, liczniki dnia, obieg chłodniczy; **tylko encje integracji i pakietów, tylko wbudowane karty HA** |
+| `dashboard/schemat.svg` | źródło grafiki panelu ogólnego (w panelu jest osadzona; po zmianie uruchom `python3 tools/build_panel.py`) |
 | `dashboard/pompa_ciepla_dashboard.json` | starszy panel (wymaga Mushroom i mini-graph-card z HACS) |
+| `moja_instalacja/` | **przykład rozbudowanej instalacji** (bufor NOEL 700 l z trzema czujnikami, maty kapilarne, watomierz, sensory SQL); wymaga podmiany encji, opis w [README](examples/moja_instalacja/README.md) |
 
-![Podgląd panelu](examples/dashboard/podglad.png)
+![Schemat panelu ogólnego](examples/dashboard/schemat.svg)
 
-**Nowy panel** (`pompa_ciepla_panel.yaml`): Ustawienia → Panele → Dodaj panel → Nowy panel od zera → otwórz go → ⋮ → Edytuj → ⋮ → Edytor konfiguracji surowej → wklej całość. Odwołuje się do czujników spoza integracji (bufor NOEL, zasilanie z PC, watomierz, temperatura zewnętrzna i salon). Jeśli masz inne nazwy encji, podmień je w pliku, najprościej przez „znajdź i zamień”.
+**Panel ogólny** (`dashboard/pompa_ciepla_panel.yaml`): Ustawienia → Panele → Dodaj panel → Nowy panel od zera → otwórz go → ⋮ → Edytuj → ⋮ → Edytor konfiguracji surowej → wklej całość. Instalator zapisuje gotową wersję w `/config/heiko_panel.yaml`. Panel ma trzy opcjonalne dodatki, oznaczone w pliku blokami `# >>> NAZWA` … `# <<< NAZWA`:
+- `ENERGY`: wykres dziennego zużycia z licznika energii pompy (kWh);
+- `POWER`: wskaźnik i wykres mocy pobieranej przez pompę (W);
+- `INDOOR`: temperatura wewnątrz na schemacie.
+
+Instalator wstawia w nie encje z parametrów `ENERGY=`, `POWER=` i `INDOOR=`, a bloki bez podanej encji usuwa. Przy ręcznym wklejaniu podmień `__ENERGY__`, `__POWER__` i `__INDOOR__` na swoje encje albo usuń te bloki. Karta sterowania i harmonogramu wymaga `allow_write: true` i pakietu harmonogramu; bez nich jej encje będą niedostępne.
 
 Pakiety włączysz w `configuration.yaml`:
 
@@ -159,7 +165,7 @@ homeassistant:
 
 Skopiuj plik do `/config/packages/` i **zamień `notify.mobile_app_TELEFON_1/2` na własne usługi powiadomień**.
 
-**Panel** ma kartę „Sterowanie (lokalnie)”. Bez `allow_write` i pakietu harmonogramu jej encje będą niedostępne, więc możesz ją usunąć. Panel wymaga z HACS kart **Mushroom** i **mini-graph-card**. Utwórz nowy panel → ⋮ → *Edytuj* → ⋮ → *Edytor konfiguracji surowej* → wklej zawartość pliku. JSON jest poprawnym YAML-em. Panel korzysta też z dwóch encji spoza integracji, które trzeba podmienić albo usunąć:
+**Starszy panel** (`pompa_ciepla_dashboard.json`) ma kartę „Sterowanie (lokalnie)”. Bez `allow_write` i pakietu harmonogramu jej encje będą niedostępne, więc możesz ją usunąć. Panel wymaga z HACS kart **Mushroom** i **mini-graph-card**. Utwórz nowy panel → ⋮ → *Edytuj* → ⋮ → *Edytor konfiguracji surowej* → wklej zawartość pliku. JSON jest poprawnym YAML-em. Panel korzysta też z dwóch encji spoza integracji, które trzeba podmienić albo usunąć:
 - `sensor.pompa_ciepla_moc`: moc pobierana przez pompę (W);
 - `sensor.pompa_ciepla_energia`: energia pobrana przez pompę (kWh, licznik rosnący).
 
@@ -261,9 +267,13 @@ custom_components/heiko_thermal/   integracja (local_push)
   sensor.py                        mapa pól (LIVE_MAP), encje odczytu
   select.py / switch.py            tryb pracy i włącznik (tylko z allow_write)
 tests/test_protocol.py             ramki z chmury muszą się zbudować bajt w bajt
-examples/                          alarmy, automatyzacja grzałek, panel
+examples/packages/                 alarmy, harmonogram trybu
+examples/dashboard/                panel ogólny + schemat.svg
+examples/moja_instalacja/          przykład rozbudowanej instalacji (NOEL, maty kapilarne)
 tools/heiko_sniff.py               podgląd ramek z konsoli (tylko odczyt)
 tools/heiko_cloud_proxy.py         pośrednik moduł <-> chmura, loguje komendy z aplikacji (do rozpracowania zapisu)
+tools/install_ha.sh                instalator / aktualizacja w HA
+tools/build_panel.py               buduje panel ogólny z tools/panel_szablon.yaml i schemat.svg
 ```
 
 ## Zmiany względem pierwszej wersji

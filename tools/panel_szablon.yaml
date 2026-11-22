@@ -1,0 +1,330 @@
+# Panel ogólny Heiko Thermal. Używa tylko encji integracji i pakietów z examples/packages.
+# Bloki między "# >>> NAZWA" i "# <<< NAZWA" są opcjonalne: instalator wstawia w nie Twoje encje
+# (ENERGY, POWER, INDOOR) albo usuwa je, gdy encji nie podasz. Przy ręcznym wklejaniu podmień
+# __ENERGY__ / __POWER__ / __INDOOR__ na swoje encje albo usuń te bloki.
+# Plik examples/dashboard/pompa_ciepla_panel.yaml generuje tools/build_panel.py (osadza schemat.svg).
+title: Pompa ciepła
+views:
+- title: Pompa ciepła
+  path: pompa
+  icon: mdi:heat-pump
+  type: sections
+  max_columns: 3
+  badges:
+  - type: entity
+    entity: sensor.heiko_temperatura_zewnetrzna
+    name: Na zewnątrz
+    show_name: true
+  - type: entity
+    entity: sensor.heiko_tryb_pracy_opis
+    name: Praca
+    show_name: true
+  - type: entity
+    entity: sensor.heiko_sprezarka_czestotliwosc
+    name: Sprężarka
+    show_name: true
+# >>> POWER
+  - type: entity
+    entity: __POWER__
+    name: Pobór
+    show_name: true
+# <<< POWER
+  - type: entity
+    entity: select.heiko_tryb_pracy_pompy
+    name: Tryb
+    show_name: true
+  sections:
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Schemat
+      icon: mdi:heat-pump-outline
+    - type: picture-elements
+      image: __SCHEMAT__
+      grid_options:
+        columns: full
+      elements:
+      - type: state-label
+        entity: sensor.heiko_tuo_woda_wyjscie
+        prefix: 'Zasilanie '
+        style:
+          left: 27%
+          top: 30%
+          color: '#ffbe88'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+      - type: state-label
+        entity: sensor.heiko_tui_woda_wejscie
+        prefix: 'Powrót '
+        style:
+          left: 27%
+          top: 75%
+          color: '#9de0ef'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+      - type: state-label
+        entity: sensor.heiko_tw_zasobnik_cwu
+        prefix: 'CWU '
+        style:
+          left: 52%
+          top: 50%
+          color: '#f5f7fa'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+      - type: state-label
+        entity: sensor.heiko_temperatura_zadana_biezacy_tryb
+        prefix: 'Zadana '
+        style:
+          left: 52%
+          top: 92%
+          color: '#f5f7fa'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+      - type: state-label
+        entity: sensor.heiko_temperatura_zewnetrzna
+        prefix: 'Zewn. '
+        style:
+          left: 14.5%
+          top: 13%
+          color: '#9de0ef'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+      - type: state-label
+        entity: sensor.heiko_sprezarka_czestotliwosc
+        prefix: 'Sprężarka '
+        style:
+          left: 14.5%
+          top: 92%
+          color: '#f5f7fa'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+# >>> INDOOR
+      - type: state-label
+        entity: __INDOOR__
+        prefix: 'Wewnątrz '
+        style:
+          left: 85%
+          top: 93%
+          color: '#f5f7fa'
+          background: rgba(13,22,29,.9)
+          border: 1px solid #65717b
+          border-radius: 20px
+          padding: 4px 9px
+          font-weight: '600'
+          font-size: clamp(10px,1.1vw,16px)
+          white-space: nowrap
+# <<< INDOOR
+      - type: conditional
+        conditions:
+        - entity: binary_sensor.heiko_odszranianie_aktywne
+          state: 'on'
+        elements:
+        - type: icon
+          icon: mdi:snowflake-melt
+          entity: binary_sensor.heiko_odszranianie_aktywne
+          style:
+            left: 14.5%
+            top: 49%
+            color: '#62d9ff'
+            --mdc-icon-size: 46px
+      - type: conditional
+        conditions:
+        - entity: binary_sensor.heiko_sprezarka_pracuje
+          state: 'on'
+        elements:
+        - type: icon
+          icon: mdi:fan
+          entity: binary_sensor.heiko_sprezarka_pracuje
+          style:
+            left: 22%
+            top: 72%
+            color: '#7ee08a'
+            --mdc-icon-size: 28px
+  - type: grid
+    cards:
+    - type: heading
+      heading: Sterowanie
+      icon: mdi:tune-variant
+    - type: tile
+      entity: switch.heiko_pompa_wlaczona
+      name: Pompa
+      grid_options:
+        columns: full
+    - type: tile
+      entity: select.heiko_tryb_pracy_pompy
+      name: Tryb pracy
+      grid_options:
+        columns: full
+      features:
+      - type: select-options
+    - type: tile
+      entity: input_boolean.heiko_harmonogram
+      name: Harmonogram
+      grid_options:
+        columns: full
+    - type: tile
+      entity: input_datetime.heiko_ogrzewanie_od
+      name: Ogrzewanie od
+    - type: tile
+      entity: input_datetime.heiko_auto_od
+      name: Auto od
+    - type: tile
+      entity: sensor.heiko_harmonogram_status
+      name: Plan pracy
+      grid_options:
+        columns: full
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Temperatury
+      icon: mdi:chart-line
+    - type: history-graph
+      hours_to_show: 24
+      grid_options:
+        columns: full
+      entities:
+      - entity: sensor.heiko_tuo_woda_wyjscie
+        name: Zasilanie (Tuo)
+      - entity: sensor.heiko_tui_woda_wejscie
+        name: Powrót (Tui)
+      - entity: sensor.heiko_tw_zasobnik_cwu
+        name: Zasobnik CWU (Tw)
+      - entity: sensor.heiko_tc_bufor
+        name: Bufor (Tc)
+      - entity: sensor.heiko_temperatura_zewnetrzna
+        name: Zewnątrz
+    - type: history-graph
+      hours_to_show: 24
+      grid_options:
+        columns: full
+      entities:
+      - entity: sensor.heiko_tryb_pracy_opis
+        name: Praca
+      - entity: binary_sensor.heiko_sprezarka_pracuje
+        name: Sprężarka
+      - entity: binary_sensor.heiko_odszranianie_aktywne
+        name: Odszranianie
+  - type: grid
+    cards:
+    - type: heading
+      heading: Dziś
+      icon: mdi:counter
+    - type: tile
+      entity: sensor.heiko_starty_sprezarki_1_h
+      name: Starty / 1 h
+    - type: tile
+      entity: sensor.heiko_odszraniania_dzis
+      name: Odszraniania
+    - type: tile
+      entity: sensor.heiko_odszranianie_czas_dzis
+      name: Czas odszraniania
+    - type: tile
+      entity: counter.heiko_alarmy_tydzien
+      name: Alarmy (tydzień)
+# >>> ENERGY
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Energia
+      icon: mdi:lightning-bolt
+    - type: statistics-graph
+      title: Zużycie dzienne
+      grid_options:
+        columns: full
+      chart_type: bar
+      period: day
+      days_to_show: 30
+      stat_types:
+      - change
+      entities:
+      - entity: __ENERGY__
+        name: Pompa ciepła
+# <<< ENERGY
+# >>> POWER
+  - type: grid
+    cards:
+    - type: heading
+      heading: Moc
+      icon: mdi:flash
+    - type: gauge
+      entity: __POWER__
+      name: Pobór mocy
+      min: 0
+      max: 6000
+      needle: true
+      grid_options:
+        columns: full
+    - type: history-graph
+      hours_to_show: 24
+      grid_options:
+        columns: full
+      entities:
+      - entity: __POWER__
+        name: Pobór
+# <<< POWER
+  - type: grid
+    column_span: 3
+    cards:
+    - type: heading
+      heading: Obieg chłodniczy
+      icon: mdi:snowflake-thermometer
+    - type: tile
+      entity: sensor.heiko_td_temperatura_tloczenia
+      name: Tłoczenie (Td)
+    - type: tile
+      entity: sensor.heiko_ts_temperatura_ssania
+      name: Ssanie (Ts)
+    - type: tile
+      entity: sensor.heiko_tp_temperatura_parownika
+      name: Parownik (Tp)
+    - type: tile
+      entity: sensor.heiko_pd_cisnienie_tloczenia
+      name: Ciśnienie tłoczenia
+    - type: tile
+      entity: sensor.heiko_ps_cisnienie_ssania
+      name: Ciśnienie ssania
+    - type: tile
+      entity: sensor.heiko_zawor_rozprezny_otwarcie
+      name: Zawór rozprężny
+    - type: tile
+      entity: sensor.heiko_wentylator_1
+      name: Wentylator
+    - type: tile
+      entity: sensor.heiko_sprezarka_prad
+      name: Prąd sprężarki
+    - type: tile
+      entity: sensor.heiko_napiecie_zasilania
+      name: Napięcie
