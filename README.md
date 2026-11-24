@@ -273,6 +273,9 @@ Zapis wartości spoza zakresu albo niecałkowitej jest odrzucany. Temperatura CO
 
 Histereza oznacza spadek temperatury, po którym pompa znowu startuje. Przykład: CWU 48 °C i histereza 9 K → start, gdy czujnik zasobnika (Tw) spadnie poniżej 39 °C. Tw jest zwykle w połowie wysokości zasobnika, więc góra bywa wtedy już wyraźnie chłodniejsza od nastawy.
 
+### Zmiana adresu modułu (od wersji 0.6.0)
+Router bez rezerwacji adresów (np. Starlink) potrafi po restarcie dać modułowi USR-W600 inny adres. Po 3 nieudanych połączeniach z rzędu integracja sama przeszukuje sieć /24 skonfigurowanego adresu: łączy się z portem modułu i czeka na ramkę pompy (jeśli znała już identyfikator pompy z ramek, wymaga tego samego). Znaleziony adres zapisuje (zostaje po restarcie HA) i pokazuje powiadomienie w HA. Adres w `configuration.yaml` można potem poprawić, ale nie jest to konieczne.
+
 ## Struktura repozytorium
 
 ```

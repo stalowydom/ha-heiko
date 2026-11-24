@@ -2,14 +2,17 @@
 from __future__ import annotations
 
 import asyncio
+import ipaddress
 import logging
 import os
 import time
 
+from homeassistant.components import persistent_notification
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.storage import Store
 from homeassistant.util import dt as dt_util
 
 from .const import is_writable
@@ -31,6 +34,12 @@ CONFIRM_TIMEOUT = 15  # s; the pump answers a write with a settings frame after 
 # unknown 0/1 flags: every change is appended to CHANGE_LOG with context, to identify them later
 UNKNOWN_FLAGS = (0, 1, 3, 4, 14, 15, 17, 18, 19, 20)
 CHANGE_LOG = "heiko_flag_changes.csv"
+
+# automatic search when the module gets a new address from DHCP (routers without address reservation, e.g. Starlink)
+SEARCH_AFTER_FAILS = 3  # failed connections in a row before searching the local /24 network
+SEARCH_CONNECT_TIMEOUT = 1.0  # s per address
+SEARCH_FRAME_TIMEOUT = 25  # s to wait for a pump frame (frames come every 10 s)
+SEARCH_PARALLEL = 64
 LOG_CONTEXT = {"hz": 21, "tuo": 5, "tui": 6, "tw": 8, "tc": 9, "amb": 25, "dhw": 2, "set": 37, "f40": 40, "f41": 41}
 
 
@@ -54,6 +63,8 @@ class HeikoListener:
         self._writer: asyncio.StreamWriter | None = None
         self._write_lock = asyncio.Lock()
         self._settings_event = asyncio.Event()
+        self._store: Store = Store(hass, 1, "heiko_thermal.host")
+        self._fails = 0
 
     # ---------- flag log ----------
     def _log_flag_changes(self, old: list[float], new: list[float]) -> None:
@@ -104,7 +115,54 @@ class HeikoListener:
     def settings_available(self) -> bool:
         return bool(self.settings) and time.monotonic() - self.last_settings < 3 * STALE_AFTER
 
+    # ---------- finding the module after an address change ----------
+    async def _probe(self, ip: str) -> bytes | None:
+        """Return the pump id if ip:port sends valid Heiko frames, else None."""
+        writer = None
+        try:
+            reader, writer = await asyncio.wait_for(asyncio.open_connection(ip, self.port), SEARCH_CONNECT_TIMEOUT)
+            buf = bytearray()
+            deadline = time.monotonic() + SEARCH_FRAME_TIMEOUT
+            while (left := deadline - time.monotonic()) > 0:
+                data = await asyncio.wait_for(reader.read(4096), left)
+                if not data:
+                    return None
+                buf += data
+                for _ftype, _values, mac in extract_frames_ex(buf):
+                    return mac
+        except Exception:  # noqa: BLE001
+            return None
+        finally:
+            if writer:
+                writer.close()
+        return None
+
+    async def _search(self) -> str | None:
+        """Scan the /24 network of the configured address for the module (the same pump id, if known)."""
+        try:
+            net = ipaddress.ip_network(f"{self.host}/24", strict=False)
+        except ValueError:
+            return None
+        _LOGGER.warning("Heiko: no connection to %s, searching the network %s", self.host, net)
+        sem = asyncio.Semaphore(SEARCH_PARALLEL)
+        found: list[str] = []
+
+        async def check(ip: str) -> None:
+            async with sem:
+                if found:
+                    return
+                mac = await self._probe(ip)
+                if mac is not None and (self.mac is None or mac == self.mac):
+                    found.append(ip)
+
+        await asyncio.gather(*(check(str(ip)) for ip in net.hosts() if str(ip) != self.host))
+        return found[0] if found else None
+
     async def _run(self) -> None:
+        stored = await self._store.async_load()
+        if stored and stored.get("host") and stored["host"] != self.host:
+            _LOGGER.info("Heiko: using the address found earlier: %s", stored["host"])
+            self.host = stored["host"]
         delay = 5
         while True:
             writer = None
@@ -113,6 +171,7 @@ class HeikoListener:
                 _LOGGER.info("Connected to %s:%s", self.host, self.port)
                 self._writer = writer
                 delay = 5
+                self._fails = 0
                 buf = bytearray()
                 while True:
                     data = await asyncio.wait_for(reader.read(4096), STALE_AFTER)
@@ -130,10 +189,23 @@ class HeikoListener:
                 raise
             except Exception as err:  # noqa: BLE001
                 _LOGGER.warning("Heiko connection problem (%s), retry in %ss", err, delay)
+                self._fails += 1
             finally:
                 self._writer = None
                 if writer:
                     writer.close()
+            if self._fails >= SEARCH_AFTER_FAILS:
+                self._fails = 0
+                new_host = await self._search()
+                if new_host:
+                    _LOGGER.warning("Heiko: module found at a new address %s (was %s)", new_host, self.host)
+                    self.host = new_host
+                    await self._store.async_save({"host": new_host})
+                    persistent_notification.async_create(
+                        self.hass, f"Moduł USR-W600 pompy Heiko zmienił adres na {new_host}. Integracja połączyła się sama.",
+                        title="Heiko: nowy adres modułu", notification_id="heiko_new_host")
+                    delay = 5
+                    continue
             await asyncio.sleep(delay)
             delay = min(delay * 2, 300)
 
