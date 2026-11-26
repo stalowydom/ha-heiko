@@ -207,7 +207,7 @@ class HeikoListener:
                     delay = 5
                     continue
             await asyncio.sleep(delay)
-            delay = min(delay * 2, 300)
+            delay = min(delay * 2, 60)  # max 1 min: after a power cut the module is found within ~3 min
 
     @callback
     def _handle(self, ftype: int, values: list[float]) -> None:
